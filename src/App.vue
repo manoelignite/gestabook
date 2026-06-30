@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import EquipamentUpdate from './pages/EquipamentUpdate.vue';
 </script>
 
 <template>
-  <HelloWorld />
+  <EquipamentUpdate id="1" />
 </template>
