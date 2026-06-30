@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Login from './pages/Login.vue'
+import EquipmentForm from './pages/EquipmentForm.vue'
 </script>
 
 <template>
-  <Login />
+  <EquipmentForm />
 </template>
