@@ -47,7 +47,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const createInitialState = () => ({
+interface EquipmentPayload {
+  type: string
+  model: string
+  serialNumber: string
+}
+
+const createInitialState = (): EquipmentPayload => ({
   type: '',
   model: '',
   serialNumber: ''
@@ -60,7 +66,7 @@ const handleSubmit = () => {
   resetForm()
 }
 
-const onSubmit = (payload) => {
+const onSubmit = (payload: EquipmentPayload) => {
   console.log('Payload enviado:', payload)
 }
 
