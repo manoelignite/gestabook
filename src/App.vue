@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import EquipmentForm from './pages/EquipmentForm.vue'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <EquipmentForm />
+  <RouterView />
 </template>
