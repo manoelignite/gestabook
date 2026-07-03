@@ -45,7 +45,9 @@
 </template>
 
 <script setup lang="ts">
+import { addDoc, collection } from 'firebase/firestore'
 import { ref } from 'vue'
+import { database } from '../config/firebaseConfig'
 
 interface EquipmentPayload {
   type: string
@@ -66,8 +68,12 @@ const handleSubmit = () => {
   resetForm()
 }
 
-const onSubmit = (payload: EquipmentPayload) => {
-  console.log('Payload enviado:', payload)
+const onSubmit = async (payload: EquipmentPayload) => {
+  try {
+    await addDoc(collection(database, 'equipments'), payload);
+  } catch (error) {
+    
+  }
 }
 
 const resetForm = () => {
