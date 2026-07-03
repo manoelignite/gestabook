@@ -3,6 +3,7 @@ import Login from '../pages/Login.vue'
 import AdminIndex from '../pages/admin/index.vue'
 import Dashborad from '../pages/Dashboard.vue'
 import EquipmentForm from '../pages/EquipmentForm.vue'
+import ListEquipments from '../pages/ListEquipments.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/equipment/new',
     name: 'New Equipment',
     component: EquipmentForm
+  },
+  {
+    path: '/equipment/list',
+    name: 'List Equipments',
+    component: ListEquipments
   }
 ]
 
