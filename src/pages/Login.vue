@@ -51,6 +51,7 @@ const verificarRole = async (email: string) => {
 
   if (docSnap.exists() && docSnap.data().role === 'user') {
     role.value = 'user'
+    router.push('/dashboard')
   } else {
     role.value = 'negado'
   }

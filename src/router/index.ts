@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../pages/Login.vue'
 import AdminIndex from '../pages/admin/index.vue'
+import Dashborad from '../pages/Dashborad.vue'
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: AdminIndex
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashborad
   }
 ]
 
