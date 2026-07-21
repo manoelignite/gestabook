@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
-import { onMounted } from 'vue';
 
 const authStore = useAuthStore();
 const router = useRouter()
@@ -42,8 +41,4 @@ const handleLogin = async () => {
 const handleLogout = async () => {
   await authStore.logout();
 }
-
-onMounted(() => {
-  authStore.initAuth();
-})
 </script>
