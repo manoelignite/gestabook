@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div v-if="!authStore.user">
     <h1>Entrar no sistema</h1>
     <button @click="handleLogin">Continuar com Google</button>
@@ -18,6 +19,7 @@
     </div>
 
     <button @click="handleLogout">Sair da conta</button>
+  </div>
   </div>
 </template>
 

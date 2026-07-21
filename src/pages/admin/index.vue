@@ -1,5 +1,6 @@
 <template>
   <div>
+  <div>
     <h1>Cadastrar Novo Usuário na Whitelist</h1>
     
     <input 
@@ -11,6 +12,10 @@
     <button @click="cadastrarUsuario">Salvar</button>
     
     <p v-if="mensagem">{{ mensagem }}</p>
+  </div>
+
+  <RouterLink :to="{ path: '/dashboard' }">Dashboard</RouterLink>
+  <RouterLink :to="{ path: '/' }">Login</RouterLink>
   </div>
 </template>
 
