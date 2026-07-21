@@ -6,31 +6,11 @@ import EquipmentForm from '../pages/EquipmentForm.vue'
 import ListEquipments from '../pages/ListEquipments.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: AdminIndex
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashborad
-  },
-  {
-    path: '/equipment/new',
-    name: 'New Equipment',
-    component: EquipmentForm
-  },
-  {
-    path: '/equipment/list',
-    name: 'List Equipments',
-    component: ListEquipments
-  }
+  { path: '/', component: Login },
+  { path: '/admin', component: AdminIndex },
+  { path: '/dashboard', component: Dashborad },
+  { path: '/equipment/new', component: EquipmentForm },
+  { path: '/equipment/list', component: ListEquipments }
 ]
 
 const router = createRouter({
