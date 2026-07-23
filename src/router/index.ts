@@ -4,6 +4,8 @@ import AdminIndex from '../pages/admin/index.vue'
 import Dashborad from '../pages/Dashboard.vue'
 import EquipmentForm from '../pages/EquipmentForm.vue'
 import ListEquipments from '../pages/ListEquipments.vue'
+import MyReservations from '../pages/MyReservations.vue'
+import AdminReservations from '../pages/admin/Reservations.vue'
 import { useAuthStore } from '../stores/auth.ts'
 
 const routes = [
@@ -11,7 +13,9 @@ const routes = [
   { path: '/admin', component: AdminIndex, meta: { requiresAuth: true, allowedRoles: ['admin'] } },
   { path: '/dashboard', component: Dashborad, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/equipment/new', component: EquipmentForm, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
-  { path: '/equipment/list', component: ListEquipments, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } }
+  { path: '/equipment/list', component: ListEquipments, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
+  { path: '/reservations/my', component: MyReservations, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
+  { path: '/admin/reservations', component: AdminReservations, meta: { requiresAuth: true, allowedRoles: ['admin'] } }
 ]
 
 const router = createRouter({
