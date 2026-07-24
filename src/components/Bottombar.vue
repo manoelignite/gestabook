@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import AdminNavButtons from './AdminNavButtons.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -17,12 +18,7 @@ const handleLogout = async () => {
     <button @click="router.push('/equipment/list')">Listar Equipamentos</button>
     <button @click="router.push('/equipment/new')">Cadastrar Equipamento</button>
     <button @click="router.push('/reservations/my')">Minhas Reservas</button>
-    <button :disabled="authStore.role !== 'admin'" @click="router.push('/admin')">
-      Gerenciar Whitelist
-    </button>
-    <button :disabled="authStore.role !== 'admin'" @click="router.push('/admin/reservations')">
-      Gerenciar Reservas
-    </button>
+    <AdminNavButtons />
     <button @click="handleLogout">Sair</button>
   </nav>
 </template>
