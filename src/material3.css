@@ -1,0 +1,434 @@
+/* ==========================================================================
+   MATERIAL DESIGN 3 (M3) DESIGN SYSTEM - PURE CSS & HTML
+   Target: Desktop Web Applications
+   Author: Frontend Engineer Specialist
+   ========================================================================== */
+
+/* 1. Imports */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+:root {
+  /* ==========================================
+     COLOR SYSTEM (M3 Baseline Light Palette)
+     ========================================== */
+  --md-sys-color-primary: #6750A4;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #EADDFF;
+  --md-sys-color-on-primary-container: #21005D;
+  
+  --md-sys-color-secondary: #625B71;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+  
+  --md-sys-color-tertiary: #7D5260;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #FFD8E4;
+  --md-sys-color-on-tertiary-container: #31111D;
+  
+  --md-sys-color-error: #B3261E;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #F9DEDC;
+  --md-sys-color-on-error-container: #410E0B;
+  
+  --md-sys-color-background: #FEF7FF;
+  --md-sys-color-on-background: #1D1B20;
+  
+  --md-sys-color-surface: #FEF7FF;
+  --md-sys-color-on-surface: #1D1B20;
+  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface-variant: #49454F;
+  
+  --md-sys-color-outline: #79747E;
+  --md-sys-color-outline-variant: #CAC4D0;
+  
+  /* M3 Surface Container Roles */
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-surface-container-low: #F7F2FA;
+  --md-sys-color-surface-container: #F3EDF7;
+  --md-sys-color-surface-container-high: #ECE6F0;
+  --md-sys-color-surface-container-highest: #E6E0E9;
+  
+  /* Tint used for Elevation color blends */
+  --md-sys-color-surface-tint: #6750A4;
+
+  /* ==========================================
+     SHAPE SCALE (M3 Official border-radius)
+     ========================================== */
+  --md-sys-shape-none: 0px;
+  --md-sys-shape-extra-small: 4px;
+  --md-sys-shape-small: 8px;
+  --md-sys-shape-medium: 12px;
+  --md-sys-shape-large: 16px;
+  --md-sys-shape-extra-large: 28px;
+  --md-sys-shape-full: 9999px;
+
+  /* ==========================================
+     ELEVATION SYSTEM (Shadows & Surface Tints)
+     ========================================== */
+  /* Elevation Shadows (Ambient + Key shadow formulas) */
+  --md-sys-elevation-0: none;
+  --md-sys-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-3: 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-4: 0px 2px 3px 0px rgba(0, 0, 0, 0.30), 0px 6px 10px 4px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-5: 0px 4px 4px 0px rgba(0, 0, 0, 0.30), 0px 8px 12px 6px rgba(0, 0, 0, 0.15);
+
+  /* Elevation Surface Colors (Surface Tint mixed with base Surface color) */
+  --md-sys-elevation-surface-0: var(--md-sys-color-surface);
+  --md-sys-elevation-surface-1: color-mix(in srgb, var(--md-sys-color-surface-tint) 5%, var(--md-sys-color-surface));
+  --md-sys-elevation-surface-2: color-mix(in srgb, var(--md-sys-color-surface-tint) 8%, var(--md-sys-color-surface));
+  --md-sys-elevation-surface-3: color-mix(in srgb, var(--md-sys-color-surface-tint) 11%, var(--md-sys-color-surface));
+  --md-sys-elevation-surface-4: color-mix(in srgb, var(--md-sys-color-surface-tint) 12%, var(--md-sys-color-surface));
+  --md-sys-elevation-surface-5: color-mix(in srgb, var(--md-sys-color-surface-tint) 15%, var(--md-sys-color-surface));
+
+  /* ==========================================
+     TYPOGRAPHY SYSTEM (M3 Roboto Scales)
+     ========================================== */
+  --md-sys-typescale-font-sans: 'Roboto', system-ui, -apple-system, sans-serif;
+
+  /* Typography Font Shorthands (weight size/line-height family) */
+  --md-sys-typescale-display-large: 400 57px/64px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-display-medium: 400 45px/52px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-display-small: 400 36px/44px var(--md-sys-typescale-font-sans);
+  
+  --md-sys-typescale-headline-large: 400 32px/40px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-headline-medium: 400 28px/36px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-headline-small: 400 24px/32px var(--md-sys-typescale-font-sans);
+  
+  --md-sys-typescale-title-large: 400 22px/28px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-title-medium: 500 16px/24px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-title-small: 500 14px/20px var(--md-sys-typescale-font-sans);
+  
+  --md-sys-typescale-body-large: 400 16px/24px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-body-medium: 400 14px/20px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-body-small: 400 12px/16px var(--md-sys-typescale-font-sans);
+  
+  --md-sys-typescale-label-large: 500 14px/20px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-label-medium: 500 12px/16px var(--md-sys-typescale-font-sans);
+  --md-sys-typescale-label-small: 500 11px/16px var(--md-sys-typescale-font-sans);
+
+  /* Letter Spacing (Tracking) */
+  --md-sys-typescale-display-large-tracking: -0.25px;
+  --md-sys-typescale-display-medium-tracking: 0px;
+  --md-sys-typescale-display-small-tracking: 0px;
+  --md-sys-typescale-headline-large-tracking: 0px;
+  --md-sys-typescale-headline-medium-tracking: 0px;
+  --md-sys-typescale-headline-small-tracking: 0px;
+  --md-sys-typescale-title-large-tracking: 0px;
+  --md-sys-typescale-title-medium-tracking: 0.15px;
+  --md-sys-typescale-title-small-tracking: 0.1px;
+  --md-sys-typescale-body-large-tracking: 0.5px;
+  --md-sys-typescale-body-medium-tracking: 0.25px;
+  --md-sys-typescale-body-small-tracking: 0.4px;
+  --md-sys-typescale-label-large-tracking: 0.1px;
+  --md-sys-typescale-label-medium-tracking: 0.5px;
+  --md-sys-typescale-label-small-tracking: 0.5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* ==========================================
+       COLOR SYSTEM (M3 Baseline Dark Palette)
+       ========================================== */
+    --md-sys-color-primary: #D0BCFF;
+    --md-sys-color-on-primary: #381E72;
+    --md-sys-color-primary-container: #4F378B;
+    --md-sys-color-on-primary-container: #EADDFF;
+    
+    --md-sys-color-secondary: #CCC2DC;
+    --md-sys-color-on-secondary: #332D41;
+    --md-sys-color-secondary-container: #4A4458;
+    --md-sys-color-on-secondary-container: #E8DEF8;
+    
+    --md-sys-color-tertiary: #EFB8C8;
+    --md-sys-color-on-tertiary: #492532;
+    --md-sys-color-tertiary-container: #633B48;
+    --md-sys-color-on-tertiary-container: #FFD8E4;
+    
+    --md-sys-color-error: #F2B8B5;
+    --md-sys-color-on-error: #601410;
+    --md-sys-color-error-container: #8C1D18;
+    --md-sys-color-on-error-container: #F9DEDC;
+    
+    --md-sys-color-background: #141218;
+    --md-sys-color-on-background: #E6E1E5;
+    
+    --md-sys-color-surface: #141218;
+    --md-sys-color-on-surface: #E6E1E5;
+    --md-sys-color-surface-variant: #49454F;
+    --md-sys-color-on-surface-variant: #CAC4D0;
+    
+    --md-sys-color-outline: #938F99;
+    --md-sys-color-outline-variant: #49454F;
+    
+    --md-sys-color-surface-container-lowest: #0F0D13;
+    --md-sys-color-surface-container-low: #1D1B20;
+    --md-sys-color-surface-container: #211F26;
+    --md-sys-color-surface-container-high: #2B2930;
+    --md-sys-color-surface-container-highest: #36343B;
+    
+    --md-sys-color-surface-tint: #D0BCFF;
+  }
+}
+
+/* ==========================================================================
+   2. MATERIAL SYMBOLS INTEGRATION
+   ========================================================================== */
+.material-symbols {
+  font-family: 'Material Symbols Outlined';
+  font-weight: var(--md-sym-wght, 400);
+  font-style: normal;
+  font-size: var(--md-sym-opsz, 24px);
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  
+  /* M3 Variable Font Settings */
+  font-variation-settings:
+    'FILL' var(--md-sym-fill, 0),
+    'wght' var(--md-sym-wght, 400),
+    'GRAD' var(--md-sym-grad, 0),
+    'opsz' var(--md-sym-opsz, 24);
+}
+
+/* ==========================================================================
+   3. BASE & RESET STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  color: var(--md-sys-color-on-background);
+  background-color: var(--md-sys-color-background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   4. BUTTON COMPONENTS
+   ========================================================================== */
+.m3-btn {
+  /* Layout Structure */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 24px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  
+  /* M3 styling */
+  border-radius: var(--md-sys-shape-full);
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  
+  /* Transitions */
+  transition: box-shadow 200ms cubic-bezier(0.2, 0, 0, 1),
+              background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+              color 200ms cubic-bezier(0.2, 0, 0, 1);
+  
+  position: relative;
+  overflow: hidden;
+}
+
+/* Specific padding adjust if button has icon */
+.m3-btn--has-icon {
+  padding-left: 16px;
+}
+
+/* M3 State Layer Implementation (Pure CSS color-mix logic overlay) */
+.m3-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+
+/* Ensure label/icon content sits above the state layer */
+.m3-btn > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Filled Button Variant */
+.m3-btn--filled {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: var(--md-sys-elevation-0);
+}
+
+.m3-btn--filled:hover:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-1);
+}
+.m3-btn--filled:hover:not(:disabled)::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 8%, transparent);
+}
+
+.m3-btn--filled:focus-visible:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-0);
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+.m3-btn--filled:focus-visible:not(:disabled)::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 12%, transparent);
+}
+
+.m3-btn--filled:active:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-0);
+}
+.m3-btn--filled:active:not(:disabled)::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 12%, transparent);
+}
+
+/* Tonal Button Variant */
+.m3-btn--tonal {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  box-shadow: var(--md-sys-elevation-0);
+}
+
+.m3-btn--tonal:hover:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-1);
+}
+.m3-btn--tonal:hover:not(:disabled)::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 8%, transparent);
+}
+
+.m3-btn--tonal:focus-visible:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-0);
+  outline: 2px solid var(--md-sys-color-secondary);
+  outline-offset: 2px;
+}
+.m3-btn--tonal:focus-visible:not(:disabled)::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 12%, transparent);
+}
+
+.m3-btn--tonal:active:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-0);
+}
+.m3-btn--tonal:active:not(:disabled)::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 12%, transparent);
+}
+
+/* Button Disabled State */
+.m3-btn:disabled {
+  cursor: default;
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+  box-shadow: var(--md-sys-elevation-0);
+}
+
+.m3-btn:disabled::before {
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   5. CARD COMPONENTS
+   ========================================================================== */
+.m3-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--md-sys-shape-large);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Elevated Card Variant */
+.m3-card--elevated {
+  background-color: var(--md-sys-elevation-surface-1);
+  box-shadow: var(--md-sys-elevation-1);
+  transition: box-shadow 200ms cubic-bezier(0.2, 0, 0, 1),
+              background-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Interactive Elevated Card */
+.m3-card--elevated.m3-card--interactive {
+  cursor: pointer;
+}
+
+/* State Layer for Interactive Cards */
+.m3-card--interactive::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+
+.m3-card--elevated.m3-card--interactive:hover {
+  background-color: var(--md-sys-elevation-surface-2);
+  box-shadow: var(--md-sys-elevation-2);
+}
+.m3-card--elevated.m3-card--interactive:hover::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+}
+
+.m3-card--elevated.m3-card--interactive:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+.m3-card--elevated.m3-card--interactive:focus-visible::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+}
+
+.m3-card--elevated.m3-card--interactive:active::before {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+}
+
+/* Card Content Sub-elements */
+.m3-card__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.m3-card__title {
+  font: var(--md-sys-typescale-title-large);
+  letter-spacing: var(--md-sys-typescale-title-large-tracking);
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 8px;
+}
+
+.m3-card__description {
+  font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.m3-card__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: auto;
+}

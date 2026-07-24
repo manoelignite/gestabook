@@ -6,7 +6,10 @@ const router = useRouter()
 
 <template>
   <header>
-    <button @click="router.back()">Voltar</button>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.back()">
+      <span class="material-symbols" style="--md-sym-opsz: 18">arrow_back</span>
+      <span>Voltar</span>
+    </button>
     <h1 align="center">Gestabook</h1>
   </header>
 </template>

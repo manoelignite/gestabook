@@ -14,11 +14,26 @@ const handleLogout = async () => {
 
 <template>
   <nav>
-    <button @click="router.push('/dashboard')">Dashboard</button>
-    <button @click="router.push('/equipment/list')">Listar Equipamentos</button>
-    <button @click="router.push('/equipment/new')">Cadastrar Equipamento</button>
-    <button @click="router.push('/reservations/my')">Minhas Reservas</button>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/dashboard')">
+      <span class="material-symbols" style="--md-sym-opsz: 18">dashboard</span>
+      <span>Dashboard</span>
+    </button>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/equipment/list')">
+      <span class="material-symbols" style="--md-sym-opsz: 18">devices</span>
+      <span>Listar Equipamentos</span>
+    </button>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/equipment/new')">
+      <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
+      <span>Cadastrar Equipamento</span>
+    </button>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/reservations/my')">
+      <span class="material-symbols" style="--md-sym-opsz: 18">book_online</span>
+      <span>Minhas Reservas</span>
+    </button>
     <AdminNavButtons />
-    <button @click="handleLogout">Sair</button>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="handleLogout" style="background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container);">
+      <span class="material-symbols" style="--md-sym-opsz: 18">logout</span>
+      <span>Sair</span>
+    </button>
   </nav>
 </template>

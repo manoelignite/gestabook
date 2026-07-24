@@ -10,10 +10,12 @@ const isDisabled = computed(() => authStore.role !== 'admin')
 </script>
 
 <template>
-  <button :disabled="isDisabled" @click="router.push('/admin')">
-    Gerenciar Whitelist
+  <button class="m3-btn m3-btn--tonal m3-btn--has-icon" :disabled="isDisabled" @click="router.push('/admin')">
+    <span class="material-symbols" style="--md-sym-opsz: 18">admin_panel_settings</span>
+    <span>Gerenciar Whitelist</span>
   </button>
-  <button :disabled="isDisabled" @click="router.push('/admin/reservations')">
-    Gerenciar Reservas
+  <button class="m3-btn m3-btn--tonal m3-btn--has-icon" :disabled="isDisabled" @click="router.push('/admin/reservations')">
+    <span class="material-symbols" style="--md-sym-opsz: 18">event_note</span>
+    <span>Gerenciar Reservas</span>
   </button>
 </template>
