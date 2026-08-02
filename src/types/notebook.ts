@@ -4,6 +4,7 @@ export interface Notebook {
   id?: string;
   brand: string;
   model: string;
+  serialNumber: string;
   cart: number;
   maintenance: boolean;
   number: number;

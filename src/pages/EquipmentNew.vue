@@ -26,6 +26,17 @@
       </div>
 
       <div>
+        <label for="notebookSerialNumber">Número de Série (Serial Number)</label>
+        <input 
+          id="notebookSerialNumber" 
+          v-model.trim="notebook.serialNumber" 
+          type="text" 
+          placeholder="Ex: BR12345XX"
+          required
+        >
+      </div>
+
+      <div>
         <label for="notebookCart">Carrinho</label>
         <input 
           id="notebookCart" 
@@ -95,6 +106,7 @@ import type { Notebook, NotebookCondition } from '../types/notebook'
 const createInitialState = (): Omit<Notebook, 'id'> => ({
   brand: '',
   model: '',
+  serialNumber: '',
   cart: 1,
   number: 1,
   condition: '' as NotebookCondition,
