@@ -4,7 +4,7 @@
     
     <div class="cards-grid">
       <!-- Card Cadastrar -->
-      <div class="m3-card m3-card--elevated m3-card--interactive" tabindex="0" @click="router.push('/equipment/new')">
+      <div class="m3-card m3-card--elevated m3-card--interactive" tabindex="0" @click="router.push('/notebook/new')">
         <div class="m3-card__content">
           <div class="card-header-icon">
             <span class="material-symbols" style="--md-sym-opsz: 32">add_circle</span>

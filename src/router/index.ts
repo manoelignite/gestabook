@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../pages/Login.vue'
 import AdminIndex from '../pages/admin/index.vue'
 import Dashborad from '../pages/Dashboard.vue'
-import EquipmentNew from '../pages/EquipmentNew.vue'
+import NotebookNew from '../pages/NotebookNew.vue'
 import ListEquipments from '../pages/ListEquipments.vue'
 import MyReservations from '../pages/MyReservations.vue'
 import AdminReservations from '../pages/admin/Reservations.vue'
@@ -12,7 +12,7 @@ const routes = [
   { path: '/', component: Login, meta: { requiresGuest: true } },
   { path: '/admin', component: AdminIndex, meta: { requiresAuth: true, allowedRoles: ['admin'] } },
   { path: '/dashboard', component: Dashborad, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
-  { path: '/equipment/new', component: EquipmentNew, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
+  { path: '/notebook/new', alias: '/equipment/new', component: NotebookNew, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/equipment/list', component: ListEquipments, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/reservations/my', component: MyReservations, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/admin/reservations', component: AdminReservations, meta: { requiresAuth: true, allowedRoles: ['admin'] } }
