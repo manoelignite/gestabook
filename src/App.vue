@@ -8,9 +8,11 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <div>
+  <div class="app-layout">
     <Header v-if="authStore.user && authStore.role !== 'denied'" />
     <RouterView />
     <Bottombar v-if="authStore.user && authStore.role !== 'denied'" />
   </div>
 </template>
+
+
