@@ -22,9 +22,9 @@ const handleLogout = async () => {
       <span class="material-symbols" style="--md-sym-opsz: 18">devices</span>
       <span>Listar Equipamentos</span>
     </button>
-    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/notebook/new')">
-      <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-      <span>Cadastrar Notebook</span>
+    <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/equipment/new')">
+      <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
+      <span>Cadastrar Equipamento</span>
     </button>
     <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/reservations/my')">
       <span class="material-symbols" style="--md-sym-opsz: 18">book_online</span>
