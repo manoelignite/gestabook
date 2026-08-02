@@ -27,7 +27,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-// import { getEquipmentById, updateEquipmentMaintenance } from '@firebase/data-connect'
 
 const props = defineProps<{
   id: string
@@ -50,33 +49,5 @@ const errorMessage = ref<string>('')
 const isSuccess = ref<boolean>(false)
 
 onMounted(async () => {
-//   try {
-//     const { data } = await getEquipmentById({ id: props.id })
-//     if (data && data.equipment) {
-//       equipment.value = data.equipment as Equipment
-//       isUnderMaintenance.value = data.equipment.isUnderMaintenance
-//     } else {
-//       errorMessage.value = 'Equipamento não encontrado.'
-//     }
-//   } catch (error: any) {
-//     errorMessage.value = 'Erro ao buscar: ' + error.message
-//   } finally {
-//     isLoading.value = false
-//   }
 })
-
-// const updateStatus = async () => {
-//   errorMessage.value = ''
-//   isSuccess.value = false
-
-//   try {
-//     await updateEquipmentMaintenance({
-//       id: props.id,
-//       isUnderMaintenance: isUnderMaintenance.value
-//     })
-//     isSuccess.value = true
-//   } catch (error: any) {
-//     errorMessage.value = 'Erro ao atualizar: ' + error.message
-//   }
-// }
 </script>

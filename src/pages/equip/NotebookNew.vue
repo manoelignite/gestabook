@@ -100,8 +100,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { addDoc, collection } from 'firebase/firestore'
-import { database } from '../config/firebaseConfig'
-import type { Notebook, NotebookCondition } from '../types/notebook'
+import { database } from '../../config/firebaseConfig'
+import type { Notebook, NotebookCondition } from '../../types/notebook'
 
 const createInitialState = (): Omit<Notebook, 'id'> => ({
   brand: '',
