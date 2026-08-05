@@ -43,6 +43,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
+  width: 100%;
   box-sizing: border-box;
   background-color: var(--md-sys-color-surface-container, #F3EDF7);
 }
