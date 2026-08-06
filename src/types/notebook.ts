@@ -5,7 +5,7 @@ export interface Notebook {
   brand: string;
   model: string;
   serialNumber: string;
-  cart: number;
+  cart: string;
   maintenance: boolean;
   number: number;
   condition: NotebookCondition;

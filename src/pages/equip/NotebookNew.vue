@@ -62,14 +62,26 @@
         >
       </div>
 
-      <div>
-        <label for="notebookCart">Carrinho</label>
+      <div class="cart-field-container">
+        <label for="notebookCart">Identificação do Carrinho</label>
+        <div class="cart-pills-grid">
+          <button 
+            v-for="option in cartOptions" 
+            :key="option" 
+            type="button" 
+            class="cart-pill-btn" 
+            :class="{ active: notebook.cart === option }"
+            @click="notebook.cart = option"
+          >
+            <span class="material-symbols" style="--md-sym-opsz: 16">shopping_cart</span>
+            <span>{{ option }}</span>
+          </button>
+        </div>
         <input 
           id="notebookCart" 
-          v-model.number="notebook.cart" 
-          type="number" 
-          min="1"
-          placeholder="Ex: 1"
+          v-model.trim="notebook.cart" 
+          type="text" 
+          placeholder="Ou digite a identificação..."
           required
         >
       </div>
@@ -132,11 +144,23 @@ import type { Notebook, NotebookCondition } from '../../types/notebook'
 
 const route = useRoute()
 
+const cartOptions = [
+  'Carrinho 1',
+  'Carrinho 2',
+  'Carrinho 3',
+  'Carrinho 4',
+  'Carrinho 5',
+  'DS-TA',
+  'DS-TB',
+  'DS-MA',
+  'DS-MB'
+]
+
 const createInitialState = (): Omit<Notebook, 'id'> => ({
   brand: '',
   model: '',
   serialNumber: '',
-  cart: 1,
+  cart: 'Carrinho 1',
   number: 1,
   condition: '' as NotebookCondition,
   maintenance: false
@@ -281,5 +305,45 @@ const resetForm = () => {
 
 .feedback-message.error {
   color: var(--md-sys-color-error);
+}
+
+.cart-field-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cart-pills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cart-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-full);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.cart-pill-btn:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+}
+
+.cart-pill-btn.active {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: var(--md-sys-color-primary);
+  font-weight: 600;
+  box-shadow: var(--md-sys-elevation-1);
 }
 </style>
