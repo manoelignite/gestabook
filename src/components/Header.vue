@@ -27,11 +27,13 @@ onUnmounted(() => {
 
 <template>
   <header class="app-header" :class="{ 'is-wco-active': isWcoVisible }">
-    <button class="m3-btn m3-btn--tonal m3-btn--has-icon wco-no-drag" @click="router.back()">
-      <span class="material-symbols" style="--md-sym-opsz: 18">arrow_back</span>
-      <span>Voltar</span>
-    </button>
-    <h1 align="center">Gestabook</h1>
+    <div class="header-left">
+      <button class="m3-btn m3-btn--tonal m3-btn--has-icon wco-no-drag" @click="router.back()">
+        <span class="material-symbols" style="--md-sym-opsz: 18">arrow_back</span>
+        <span>Voltar</span>
+      </button>
+    </div>
+    <h1 class="header-title">Gestabook</h1>
   </header>
 </template>
 
@@ -41,11 +43,33 @@ onUnmounted(() => {
   user-select: none;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
+  justify-content: space-between;
+  position: relative;
+  height: 64px;
+  padding: 0 16px;
   width: 100%;
   box-sizing: border-box;
   background-color: var(--md-sys-color-surface-container, #F3EDF7);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.header-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font: var(--md-sys-typescale-title-large);
+  color: var(--md-sys-color-on-surface);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
 }
 
 @media (display-mode: window-controls-overlay) {
@@ -80,13 +104,11 @@ onUnmounted(() => {
   -webkit-app-region: no-drag;
 }
 
-/* Ajuste proporcional para o botão dentro do cabeçalho no modo WCO */
 .app-header .m3-btn {
-  height: 32px;
+  height: 34px;
   padding: 0 12px;
   font-size: 13px;
 }
-
 </style>
 
 

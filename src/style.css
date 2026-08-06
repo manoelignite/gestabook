@@ -321,15 +321,14 @@ header {
   display: flex;
   align-items: center;
   padding: 0 24px;
-  gap: 16px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   box-shadow: var(--md-sys-elevation-1);
+  position: relative;
 }
 
 header h1 {
   font: var(--md-sys-typescale-title-large);
   margin: 0;
-  flex-grow: 1;
 }
 
 /* Bottom/Nav Bar style in M3 (Surface Container) */
