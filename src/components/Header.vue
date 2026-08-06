@@ -87,7 +87,7 @@ onUnmounted(() => {
     height: max(env(titlebar-area-height, 48px), 48px);
     padding-left: calc(env(titlebar-area-x, 0px) + 12px);
     padding-right: calc(100% - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100%) + 12px);
-    border-bottom: none;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
     box-shadow: none;
     z-index: 10000;
   }
@@ -101,7 +101,7 @@ onUnmounted(() => {
   height: max(env(titlebar-area-height, 48px), 48px);
   padding-left: calc(env(titlebar-area-x, 0px) + 12px);
   padding-right: calc(100% - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100%) + 12px);
-  border-bottom: none;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
   box-shadow: none;
   z-index: 10000;
 }
