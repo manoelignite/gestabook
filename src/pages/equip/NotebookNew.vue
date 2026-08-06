@@ -73,7 +73,7 @@
             :class="{ active: notebook.cart === option }"
             @click="notebook.cart = option"
           >
-            <span class="material-symbols" style="--md-sym-opsz: 16">shopping_cart</span>
+            <span class="material-symbols" style="--md-sym-opsz: 16">charger</span>
             <span>{{ option }}</span>
           </button>
         </div>
