@@ -322,7 +322,7 @@ header {
   align-items: center;
   padding: 0 24px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
-  box-shadow: var(--md-sys-elevation-1);
+  box-shadow: none;
   position: relative;
 }
 

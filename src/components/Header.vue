@@ -53,6 +53,7 @@ onUnmounted(() => {
   box-sizing: border-box;
   background-color: var(--md-sys-color-surface-container, #F3EDF7);
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  box-shadow: none;
 }
 
 .header-left {
