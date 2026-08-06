@@ -33,11 +33,13 @@ onUnmounted(() => {
         <span>Voltar</span>
       </button>
     </div>
-    <h1 class="header-title">Gestabook</h1>
+    <h1 class="header-title">Gestabook_</h1>
   </header>
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap');
+
 .app-header {
   -webkit-app-region: drag;
   user-select: none;
@@ -65,7 +67,10 @@ onUnmounted(() => {
   top: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
-  font: var(--md-sys-typescale-title-large);
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
   color: var(--md-sys-color-on-surface);
   white-space: nowrap;
   pointer-events: none;
