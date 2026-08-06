@@ -10,7 +10,9 @@ const authStore = useAuthStore();
 <template>
   <div class="app-layout">
     <Header v-if="authStore.user && authStore.role !== 'denied'" />
-    <RouterView />
+    <main class="app-content">
+      <RouterView />
+    </main>
     <Bottombar v-if="authStore.user && authStore.role !== 'denied'" />
   </div>
 </template>
@@ -18,7 +20,19 @@ const authStore = useAuthStore();
 <style scoped>
 .app-layout {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }

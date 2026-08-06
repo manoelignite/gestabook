@@ -303,19 +303,29 @@ code {
    M3 GLOBAL LAYOUT & COMPONENT STYLING FOR GESTABOOK
    ========================================================================== */
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 /* Main Layout container */
 #app {
   background-color: var(--md-sys-color-background);
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
-  border: none;
-  /* Clean up old borders */
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Header style in M3 (Surface Container) */
 header {
   height: 64px;
+  flex-shrink: 0;
   background-color: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface);
   display: flex;
@@ -334,6 +344,7 @@ header h1 {
 /* Bottom/Nav Bar style in M3 (Surface Container) */
 nav {
   height: 80px;
+  flex-shrink: 0;
   background-color: var(--md-sys-color-surface-container);
   border-top: 1px solid var(--md-sys-color-outline-variant);
   display: flex;
@@ -341,8 +352,8 @@ nav {
   justify-content: center;
   gap: 12px;
   padding: 0 24px;
-  margin-top: auto;
-  /* Fix at the bottom */
+  padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
 }
 
 /* Form Styles */
@@ -438,10 +449,8 @@ ul li:hover {
 }
 
 /* Window Controls Overlay (WCO) Desktop PWA Styles */
-@media (display-mode: window-controls-overlay) {
-  body {
-    padding-top: max(env(titlebar-area-height, 48px), 48px);
-  }
+.wco-drag {
+  -webkit-app-region: drag;
 }
 
 .wco-drag {

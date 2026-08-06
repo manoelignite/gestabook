@@ -80,9 +80,8 @@ onUnmounted(() => {
 
 @media (display-mode: window-controls-overlay) {
   .app-header {
-    position: fixed;
-    top: env(titlebar-area-y, 0px);
-    left: 0;
+    position: relative;
+    flex-shrink: 0;
     width: 100%;
     height: max(env(titlebar-area-height, 48px), 48px);
     padding-left: calc(env(titlebar-area-x, 0px) + 12px);
@@ -94,9 +93,8 @@ onUnmounted(() => {
 }
 
 .app-header.is-wco-active {
-  position: fixed;
-  top: env(titlebar-area-y, 0px);
-  left: 0;
+  position: relative;
+  flex-shrink: 0;
   width: 100%;
   height: max(env(titlebar-area-height, 48px), 48px);
   padding-left: calc(env(titlebar-area-x, 0px) + 12px);
