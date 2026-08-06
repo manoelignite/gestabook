@@ -5,17 +5,25 @@
     <div class="presets-bar">
       <span class="presets-label">Preenchimento Rápido:</span>
       <div class="pills-grid">
-        <button type="button" class="pill-btn" @click="applyPreset('Samsung', 'Chromebook 4')">
+        <button type="button" class="pill-btn" @click="applyPreset('Samsung', 'Chromebook')">
           <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
           <span>Samsung Chromebook</span>
         </button>
-        <button type="button" class="pill-btn" @click="applyPreset('Dell', 'Latitude 5430')">
+        <button type="button" class="pill-btn" @click="applyPreset('Positivo', 'Master N8440')">
           <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>Dell Latitude</span>
+          <span>Positivo Master N8440</span>
         </button>
-        <button type="button" class="pill-btn" @click="applyPreset('Lenovo', '300e')">
+        <button type="button" class="pill-btn" @click="applyPreset('Lenovo', 'ThinkPad L14')">
           <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>Lenovo Chromebook</span>
+          <span>ThinkPad L14</span>
+        </button>
+        <button type="button" class="pill-btn" @click="applyPreset('Positivo', 'Master N1110')">
+          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
+          <span>Positivo Master N1110</span>
+        </button>
+        <button type="button" class="pill-btn" @click="applyPreset('Positivo', 'Master N1210')">
+          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
+          <span>Positivo Master N1210</span>
         </button>
       </div>
     </div>

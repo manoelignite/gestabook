@@ -54,10 +54,11 @@ interface Preset {
 }
 
 const notebookPresets: Preset[] = [
-  { label: 'Samsung Chromebook', brand: 'Samsung', model: 'Chromebook 4' },
-  { label: 'Dell Latitude', brand: 'Dell', model: 'Latitude 5430' },
-  { label: 'Lenovo Chromebook', brand: 'Lenovo', model: '300e' },
-  { label: 'Positivo Chromebook', brand: 'Positivo', model: 'CH1140' }
+  { label: 'Samsung Chromebook', brand: 'Samsung', model: 'Chromebook' },
+  { label: 'Positivo Master N8440', brand: 'Positivo', model: 'Master N8440' },
+  { label: 'ThinkPad L14', brand: 'Lenovo', model: 'ThinkPad L14' },
+  { label: 'Positivo Master N1110', brand: 'Positivo', model: 'Master N1110' },
+  { label: 'Positivo Master N1210', brand: 'Positivo', model: 'Master N1210' }
 ]
 
 const goToNotebookNew = (brand?: string, model?: string) => {
