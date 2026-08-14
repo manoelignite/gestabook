@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import UserAvatarMenu from './UserAvatarMenu.vue'
 
 const router = useRouter()
 const isWcoVisible = ref(false)
@@ -34,6 +35,9 @@ onUnmounted(() => {
       </button>
     </div>
     <h1 class="header-title">Gestabook_</h1>
+    <div class="header-right">
+      <UserAvatarMenu />
+    </div>
   </header>
 </template>
 
@@ -56,7 +60,8 @@ onUnmounted(() => {
   box-shadow: none;
 }
 
-.header-left {
+.header-left,
+.header-right {
   display: flex;
   align-items: center;
   z-index: 2;
