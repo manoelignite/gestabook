@@ -1,0 +1,771 @@
+<template>
+  <div class="notebook-list-page">
+    <!-- CABEÇALHO COM FILTROS -->
+    <div class="header-section">
+      <div class="title-row">
+        <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/equipment/list')">
+          <span class="material-symbols" style="--md-sym-opsz: 18">arrow_back</span>
+          <span>Voltar aos Equipamentos</span>
+        </button>
+        <h2 class="page-title">Notebooks</h2>
+      </div>
+
+      <!-- SELETORES DE FILTRO (PILLS) -->
+      <div class="filters-container">
+        <!-- Filtro por Carrinhos -->
+        <div class="filter-group">
+          <span class="filter-label">Carrinhos:</span>
+          <div class="pills-grid">
+            <FilterPill 
+              label="Todos"
+              :active="selectedCart === null && selectedPreset === null"
+              @click="clearFilters"
+            />
+            <FilterPill 
+              v-for="cart in cartOptions" 
+              :key="cart" 
+              :label="cart"
+              icon="charger"
+              :active="selectedCart === cart"
+              @click="toggleCartFilter(cart)"
+            />
+          </div>
+        </div>
+
+        <!-- Filtro por Marca / Modelo -->
+        <div class="filter-group">
+          <span class="filter-label">Modelos Frequentes:</span>
+          <div class="pills-grid">
+            <FilterPill 
+              v-for="preset in modelPresets" 
+              :key="preset.label" 
+              :label="preset.label"
+              icon="laptop_mac"
+              :active="selectedPreset?.label === preset.label"
+              @click="togglePresetFilter(preset)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA COMPLETA DE NOTEBOOKS -->
+    <div class="list-section">
+      <div class="list-info-bar">
+        <span v-if="isFilterActive" class="info-text">
+          Filtrando por: <strong>{{ activeFilterText }}</strong> ({{ filteredNotebooks.length }} encontrados)
+        </span>
+        <span v-else class="info-text">
+          Exibindo todos os <strong>{{ filteredNotebooks.length }} notebooks</strong> cadastrados:
+        </span>
+      </div>
+
+      <div v-if="filteredNotebooks.length > 0" class="notebooks-list">
+        <div 
+          v-for="item in filteredNotebooks" 
+          :key="item.id" 
+          class="m3-list-item notebook-item"
+          tabindex="0"
+          @click="openNotebookDetails(item)"
+        >
+          <div class="item-icon">
+            <span class="material-symbols" style="--md-sym-opsz: 24">laptop_mac</span>
+          </div>
+
+          <div class="item-details">
+            <div class="item-title">{{ getBrandModelText(item) }}</div>
+            <div class="item-subdetails">
+              <span class="item-sn">SN: {{ item.serialNumber || 'N/A' }}</span>
+              <span class="separator" v-if="item.number">•</span>
+              <span class="item-number" v-if="item.number">Nº {{ item.number }}</span>
+            </div>
+          </div>
+
+          <div class="item-pills">
+            <!-- Pill de Carrinho (Reutiliza o componente FilterPill) -->
+            <FilterPill 
+              v-if="item.cart" 
+              :label="item.cart"
+              icon="charger"
+              :active="selectedCart === item.cart"
+              title="Filtrar por este carrinho"
+              @click.stop="toggleCartFilter(item.cart)"
+            />
+
+            <!-- Pill de Condição com variantes de cor (Verde = Excelente, Azul = Boa, Laranja = Ruim) -->
+            <FilterPill 
+              :label="item.condition ? capitalize(item.condition) : 'N/A'"
+              :icon="getConditionIcon(item.condition)"
+              :variant="getConditionVariant(item.condition)"
+            />
+
+            <!-- Pill de Manutenção (Verde = Operacional, Vermelho = Em Manutenção) -->
+            <FilterPill 
+              :label="item.maintenance ? 'Em Manutenção' : 'Operacional'"
+              :icon="item.maintenance ? 'build' : 'check_circle'"
+              :variant="item.maintenance ? 'red' : 'green'"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="empty-state">
+        <span class="material-symbols" style="--md-sym-opsz: 48">inventory_2</span>
+        <p v-if="isFilterActive">Nenhum notebook encontrado para os filtros selecionados.</p>
+        <p v-else>Nenhum notebook cadastrado ainda.</p>
+        <button v-if="isFilterActive" class="m3-btn m3-btn--tonal" @click="clearFilters">
+          Limpar Filtros
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL DE DETALHES DO NOTEBOOK (AO CLICAR EM UM ITEM DA LISTA) -->
+    <teleport to="body">
+      <transition name="modal-fade">
+        <div v-if="selectedNotebook" class="modal-overlay" @click.self="closeNotebookDetails">
+          <div class="modal-card m3-card m3-card--elevated">
+            <div class="m3-card__content">
+              <div class="modal-header">
+                <div class="modal-header-left">
+                  <div class="modal-icon">
+                    <span class="material-symbols" style="--md-sym-opsz: 32">laptop_mac</span>
+                  </div>
+                  <div>
+                    <span class="modal-category">Notebook</span>
+                    <h3 class="modal-title">{{ getBrandModelText(selectedNotebook) }}</h3>
+                  </div>
+                </div>
+                <button class="modal-close-btn" aria-label="Fechar" @click="closeNotebookDetails">
+                  <span class="material-symbols" style="--md-sym-opsz: 20">close</span>
+                </button>
+              </div>
+
+              <div class="modal-body-grid">
+                <div class="info-field">
+                  <span class="field-label">Marca</span>
+                  <span class="field-value">{{ selectedNotebook.brand || 'Não informada' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Modelo</span>
+                  <span class="field-value">{{ selectedNotebook.model || 'Não informado' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Número de Série (SN)</span>
+                  <span class="field-value monospace">{{ selectedNotebook.serialNumber || 'N/A' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Carrinho</span>
+                  <span class="field-value highlight">
+                    <span class="material-symbols" style="--md-sym-opsz: 18">charger</span>
+                    {{ selectedNotebook.cart || 'Sem carrinho' }}
+                  </span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Número</span>
+                  <span class="field-value">#{{ selectedNotebook.number ?? 'N/A' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Condição</span>
+                  <FilterPill 
+                    :label="selectedNotebook.condition ? capitalize(selectedNotebook.condition) : 'Não informada'"
+                    :icon="getConditionIcon(selectedNotebook.condition)"
+                    :variant="getConditionVariant(selectedNotebook.condition)"
+                  />
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Status de Manutenção</span>
+                  <FilterPill 
+                    :label="selectedNotebook.maintenance ? 'Em Manutenção' : 'Em Uso / Operacional'"
+                    :icon="selectedNotebook.maintenance ? 'build' : 'check_circle'"
+                    :variant="selectedNotebook.maintenance ? 'red' : 'green'"
+                  />
+                </div>
+
+                <div class="info-field full-width">
+                  <span class="field-label">ID do Documento (Firestore)</span>
+                  <span class="field-value monospace small">{{ selectedNotebook.id }}</span>
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button class="m3-btn m3-btn--tonal" @click="closeNotebookDetails">
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </teleport>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { collection, getDocs } from 'firebase/firestore';
+import { database } from '../../config/firebaseConfig';
+import FilterPill from '../../components/FilterPill.vue';
+
+interface Preset {
+  label: string;
+  brand: string;
+  model: string;
+}
+
+const router = useRouter();
+const equipments = ref<any[]>([]);
+const selectedNotebook = ref<any | null>(null);
+
+const selectedCart = ref<string | null>(null);
+const selectedPreset = ref<Preset | null>(null);
+
+const cartOptions = [
+  'Carrinho 1',
+  'Carrinho 2',
+  'Carrinho 3',
+  'Carrinho 4',
+  'Carrinho 5',
+  'DS-TA',
+  'DS-TB',
+  'DS-MA',
+  'DS-MB'
+];
+
+const modelPresets: Preset[] = [
+  { label: 'Samsung Chromebook', brand: 'Samsung', model: 'Chromebook' },
+  { label: 'Positivo Master N8440', brand: 'Positivo', model: 'Master N8440' },
+  { label: 'ThinkPad L14', brand: 'Lenovo', model: 'ThinkPad L14' },
+  { label: 'Positivo Master N1110', brand: 'Positivo', model: 'Master N1110' },
+  { label: 'Positivo Master N1210', brand: 'Positivo', model: 'Master N1210' }
+];
+
+const getAllEquipments = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(database, 'equipments'));
+    equipments.value = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Erro ao buscar notebooks:', error);
+  }
+};
+
+const notebooksOnly = computed(() => {
+  return equipments.value.filter(item => {
+    if (!item.type) return true; // Tratamento para docs sem propriedade type
+    return item.type.toLowerCase() === 'notebook';
+  });
+});
+
+const isFilterActive = computed(() => selectedCart.value !== null || selectedPreset.value !== null);
+
+const activeFilterText = computed(() => {
+  const parts: string[] = [];
+  if (selectedCart.value) parts.push(`Carrinho: ${selectedCart.value}`);
+  if (selectedPreset.value) parts.push(`Modelo: ${selectedPreset.value.label}`);
+  return parts.join(' | ');
+});
+
+const filteredNotebooks = computed(() => {
+  return notebooksOnly.value.filter(item => {
+    if (selectedCart.value && item.cart !== selectedCart.value) {
+      return false;
+    }
+    if (selectedPreset.value) {
+      const matchBrand = (item.brand || '').toLowerCase().includes(selectedPreset.value.brand.toLowerCase());
+      const matchModel = (item.model || '').toLowerCase().includes(selectedPreset.value.model.toLowerCase());
+      if (!matchBrand && !matchModel) {
+        return false;
+      }
+    }
+    return true;
+  });
+});
+
+const toggleCartFilter = (cart: string) => {
+  if (selectedCart.value === cart) {
+    selectedCart.value = null;
+  } else {
+    selectedCart.value = cart;
+  }
+};
+
+const togglePresetFilter = (preset: Preset) => {
+  if (selectedPreset.value?.label === preset.label) {
+    selectedPreset.value = null;
+  } else {
+    selectedPreset.value = preset;
+  }
+};
+
+const clearFilters = () => {
+  selectedCart.value = null;
+  selectedPreset.value = null;
+};
+
+const openNotebookDetails = (item: any) => {
+  selectedNotebook.value = item;
+};
+
+const closeNotebookDetails = () => {
+  selectedNotebook.value = null;
+};
+
+const getBrandModelText = (item: any) => {
+  const brand = item.brand || '';
+  const model = item.model || '';
+  if (brand && model) return `${brand} ${model}`;
+  if (brand) return brand;
+  if (model) return model;
+  return 'Notebook Sem Nome';
+};
+
+const getConditionVariant = (condition?: string) => {
+  switch (condition?.toLowerCase()) {
+    case 'excelente': return 'green';
+    case 'boa': return 'blue';
+    case 'ruim': return 'orange';
+    default: return 'default';
+  }
+};
+
+const getConditionIcon = (condition?: string) => {
+  switch (condition?.toLowerCase()) {
+    case 'excelente': return 'sentiment_very_satisfied';
+    case 'boa': return 'thumb_up';
+    case 'ruim': return 'warning';
+    default: return 'help';
+  }
+};
+
+const capitalize = (text: string) => {
+  if (!text) return '';
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
+onMounted(() => {
+  getAllEquipments();
+});
+</script>
+
+<style scoped>
+.notebook-list-page {
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header-section {
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-title {
+  margin: 0;
+  font: var(--md-sys-typescale-headline-medium);
+  color: var(--md-sys-color-on-surface);
+}
+
+.filters-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--md-sys-color-surface-container-low);
+  padding: 16px;
+  border-radius: var(--md-sys-shape-medium);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  box-sizing: border-box;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font: var(--md-sys-typescale-label-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  text-align: left;
+}
+
+.pills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-full);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pill-btn:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+}
+
+.pill-btn.active {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: var(--md-sys-color-primary);
+  font-weight: 600;
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+.list-section {
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.notebooks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.notebook-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-medium);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  cursor: pointer;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+  text-align: left;
+}
+
+.notebook-item:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+.item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  width: 42px;
+  height: 42px;
+  border-radius: var(--md-sys-shape-full);
+  flex-shrink: 0;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.item-title {
+  font: var(--md-sys-typescale-title-medium);
+  color: var(--md-sys-color-on-surface);
+}
+
+.item-subdetails {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--md-sys-typescale-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+  flex-wrap: wrap;
+}
+
+.item-cart {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.separator {
+  color: var(--md-sys-color-outline-variant);
+}
+
+.item-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.item-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  height: 28px;
+  border-radius: var(--md-sys-shape-full);
+  font: var(--md-sys-typescale-label-small);
+  font-weight: 600;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.cart-pill-item {
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.cart-pill-item:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  transform: translateY(-1px);
+}
+
+.cart-pill-item.active {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+/* BADGES / PILLS DE CONDIÇÃO E MANUTENÇÃO */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--md-sys-shape-extra-small);
+  font: var(--md-sys-typescale-label-small);
+  font-weight: 600;
+}
+
+.badge-success {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+}
+
+.badge-info {
+  background-color: #E3F2FD;
+  color: #1565C0;
+}
+
+.badge-warning {
+  background-color: #FFF3E0;
+  color: #E65100;
+}
+
+.badge-error {
+  background-color: #FFEBEE;
+  color: #C62828;
+}
+
+.badge-neutral {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--md-sys-color-outline);
+  padding: 48px 0;
+}
+
+/* MODAL DE DETALHES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: left;
+  animation: modalScaleIn 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  margin-bottom: 16px;
+}
+
+.modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--md-sys-shape-medium);
+}
+
+.modal-category {
+  font: var(--md-sys-typescale-label-medium);
+  color: var(--md-sys-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-title {
+  margin: 2px 0 0 0;
+  font: var(--md-sys-typescale-headline-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease;
+}
+
+.modal-close-btn:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.modal-body-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--md-sys-color-surface-container-low);
+  padding: 10px 14px;
+  border-radius: var(--md-sys-shape-small);
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.info-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.field-label {
+  font: var(--md-sys-typescale-label-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.field-value {
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface);
+  font-weight: 500;
+}
+
+.field-value.monospace {
+  font-family: monospace;
+}
+
+.field-value.monospace.small {
+  font-size: 11px;
+}
+
+.field-value.highlight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--md-sys-color-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* ANIMAÇÕES DO MODAL */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 200ms ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes modalScaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+</style>

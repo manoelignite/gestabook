@@ -5,26 +5,11 @@
     <div class="presets-bar">
       <span class="presets-label">Preenchimento Rápido:</span>
       <div class="pills-grid">
-        <button type="button" class="pill-btn" @click="applyPreset('Samsung', 'Chromebook')">
-          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>Samsung Chromebook</span>
-        </button>
-        <button type="button" class="pill-btn" @click="applyPreset('Positivo', 'Master N8440')">
-          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>Positivo Master N8440</span>
-        </button>
-        <button type="button" class="pill-btn" @click="applyPreset('Lenovo', 'ThinkPad L14')">
-          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>ThinkPad L14</span>
-        </button>
-        <button type="button" class="pill-btn" @click="applyPreset('Positivo', 'Master N1110')">
-          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>Positivo Master N1110</span>
-        </button>
-        <button type="button" class="pill-btn" @click="applyPreset('Positivo', 'Master N1210')">
-          <span class="material-symbols" style="--md-sym-opsz: 18">laptop_mac</span>
-          <span>Positivo Master N1210</span>
-        </button>
+        <FilterPill label="Samsung Chromebook" icon="laptop_mac" @click="applyPreset('Samsung', 'Chromebook')" />
+        <FilterPill label="Positivo Master N8440" icon="laptop_mac" @click="applyPreset('Positivo', 'Master N8440')" />
+        <FilterPill label="ThinkPad L14" icon="laptop_mac" @click="applyPreset('Lenovo', 'ThinkPad L14')" />
+        <FilterPill label="Positivo Master N1110" icon="laptop_mac" @click="applyPreset('Positivo', 'Master N1110')" />
+        <FilterPill label="Positivo Master N1210" icon="laptop_mac" @click="applyPreset('Positivo', 'Master N1210')" />
       </div>
     </div>
 
@@ -65,17 +50,14 @@
       <div class="cart-field-container">
         <label for="notebookCart">Identificação do Carrinho</label>
         <div class="cart-pills-grid">
-          <button 
+          <FilterPill 
             v-for="option in cartOptions" 
             :key="option" 
-            type="button" 
-            class="cart-pill-btn" 
-            :class="{ active: notebook.cart === option }"
+            :label="option" 
+            icon="charger" 
+            :active="notebook.cart === option" 
             @click="notebook.cart = option"
-          >
-            <span class="material-symbols" style="--md-sym-opsz: 16">charger</span>
-            <span>{{ option }}</span>
-          </button>
+          />
         </div>
         <input 
           id="notebookCart" 
@@ -141,6 +123,7 @@ import { useRoute } from 'vue-router'
 import { addDoc, collection } from 'firebase/firestore'
 import { database } from '../../config/firebaseConfig'
 import type { Notebook, NotebookCondition } from '../../types/notebook'
+import FilterPill from '../../components/FilterPill.vue'
 
 const route = useRoute()
 

@@ -4,6 +4,7 @@ import AdminIndex from '../pages/admin/index.vue'
 import Dashborad from '../pages/Dashboard.vue'
 import EquipmentNew from '../pages/equip/EquipmentNew.vue'
 import NotebookNew from '../pages/equip/NotebookNew.vue'
+import NotebookList from '../pages/equip/NotebookList.vue'
 import ListEquipments from '../pages/ListEquipments.vue'
 import MyReservations from '../pages/MyReservations.vue'
 import AdminReservations from '../pages/admin/Reservations.vue'
@@ -15,6 +16,7 @@ const routes = [
   { path: '/dashboard', component: Dashborad, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/equipment/new', component: EquipmentNew, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/notebook/new', component: NotebookNew, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
+  { path: '/notebook/list', component: NotebookList, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/equipment/list', component: ListEquipments, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/reservations/my', component: MyReservations, meta: { requiresAuth: true, allowedRoles: ['admin', 'user'] } },
   { path: '/admin/reservations', component: AdminReservations, meta: { requiresAuth: true, allowedRoles: ['admin'] } }

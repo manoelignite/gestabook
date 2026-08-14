@@ -24,15 +24,13 @@
           <div class="presets-container">
             <span class="presets-label">Comandos Diretos / Preenchimento Rápido:</span>
             <div class="pills-grid">
-              <button 
+              <FilterPill 
                 v-for="preset in notebookPresets" 
                 :key="preset.label"
-                class="pill-btn" 
+                :label="preset.label"
+                :icon="preset.icon || 'laptop_mac'"
                 @click="goToNotebookNew(preset.brand, preset.model)"
-              >
-                <span class="material-symbols" style="--md-sym-opsz: 18">{{ preset.icon || 'laptop_mac' }}</span>
-                <span>{{ preset.label }}</span>
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -43,6 +41,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import FilterPill from '../../components/FilterPill.vue'
 
 const router = useRouter()
 
