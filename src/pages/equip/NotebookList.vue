@@ -61,52 +61,14 @@
       </div>
 
       <div v-if="filteredNotebooks.length > 0" class="notebooks-list">
-        <div 
+        <NotebookListItem 
           v-for="item in filteredNotebooks" 
           :key="item.id" 
-          class="m3-list-item notebook-item"
-          tabindex="0"
-          @click="openNotebookDetails(item)"
-        >
-          <div class="item-icon">
-            <span class="material-symbols" style="--md-sym-opsz: 24">laptop_mac</span>
-          </div>
-
-          <div class="item-details">
-            <div class="item-title">{{ getBrandModelText(item) }}</div>
-            <div class="item-subdetails">
-              <span class="item-sn">SN: {{ item.serialNumber || 'N/A' }}</span>
-              <span class="separator" v-if="item.number">•</span>
-              <span class="item-number" v-if="item.number">Nº {{ item.number }}</span>
-            </div>
-          </div>
-
-          <div class="item-pills">
-            <!-- Pill de Carrinho (Reutiliza o componente FilterPill) -->
-            <FilterPill 
-              v-if="item.cart" 
-              :label="item.cart"
-              icon="charger"
-              :active="selectedCart === item.cart"
-              title="Filtrar por este carrinho"
-              @click.stop="toggleCartFilter(item.cart)"
-            />
-
-            <!-- Pill de Condição com variantes de cor (Verde = Excelente, Azul = Boa, Laranja = Ruim) -->
-            <FilterPill 
-              :label="item.condition ? capitalize(item.condition) : 'N/A'"
-              :icon="getConditionIcon(item.condition)"
-              :variant="getConditionVariant(item.condition)"
-            />
-
-            <!-- Pill de Manutenção (Verde = Operacional, Vermelho = Em Manutenção) -->
-            <FilterPill 
-              :label="item.maintenance ? 'Em Manutenção' : 'Operacional'"
-              :icon="item.maintenance ? 'build' : 'check_circle'"
-              :variant="item.maintenance ? 'red' : 'green'"
-            />
-          </div>
-        </div>
+          :notebook="item"
+          :selected-cart="selectedCart"
+          @click="openNotebookDetails"
+          @cart-click="toggleCartFilter"
+        />
       </div>
 
       <div v-else class="empty-state">
@@ -212,6 +174,7 @@ import { useRouter } from 'vue-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../config/firebaseConfig';
 import FilterPill from '../../components/FilterPill.vue';
+import NotebookListItem from '../../components/NotebookListItem.vue';
 
 interface Preset {
   label: string;

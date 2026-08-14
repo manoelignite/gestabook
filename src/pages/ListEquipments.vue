@@ -35,27 +35,12 @@
             <span class="preview-label">Últimos 3 cadastrados:</span>
 
             <div v-if="recentNotebooks.length > 0" class="items-list">
-              <div v-for="item in recentNotebooks" :key="item.id" class="m3-list-item preview-item">
-                <div class="item-icon">
-                  <span class="material-symbols" style="--md-sym-opsz: 20">laptop_mac</span>
-                </div>
-                <div class="item-info">
-                  <span class="item-name">{{ getBrandModelText(item) }}</span>
-                  <span class="item-sub">SN: {{ item.serialNumber || 'N/A' }}</span>
-                </div>
-                <div class="item-pills">
-                  <FilterPill 
-                    v-if="item.cart" 
-                    :label="item.cart"
-                    icon="charger"
-                  />
-                  <FilterPill 
-                    :label="item.condition ? capitalize(item.condition) : 'N/A'"
-                    :icon="getConditionIcon(item.condition)"
-                    :variant="getConditionVariant(item.condition)"
-                  />
-                </div>
-              </div>
+              <NotebookListItem 
+                v-for="item in recentNotebooks" 
+                :key="item.id" 
+                :notebook="item"
+                @click="navigateToNotebookList"
+              />
             </div>
 
             <div v-else class="empty-preview">
@@ -73,7 +58,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../config/firebaseConfig';
-import FilterPill from '../components/FilterPill.vue';
+import NotebookListItem from '../components/NotebookListItem.vue';
 
 const router = useRouter();
 const equipments = ref<any[]>([]);
@@ -97,45 +82,13 @@ const notebooksOnly = computed(() => {
   });
 });
 
-// Apenas os últimos 3 cadastrados para exibição previa na página principal
+// Apenas os últimos 3 cadastrados para exibição prévia na página principal
 const recentNotebooks = computed(() => {
   return notebooksOnly.value.slice(-3).reverse();
 });
 
 const navigateToNotebookList = () => {
   router.push('/notebook/list');
-};
-
-const getBrandModelText = (item: any) => {
-  const brand = item.brand || '';
-  const model = item.model || '';
-  if (brand && model) return `${brand} ${model}`;
-  if (brand) return brand;
-  if (model) return model;
-  return 'Notebook Sem Nome';
-};
-
-const getConditionVariant = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'green';
-    case 'boa': return 'blue';
-    case 'ruim': return 'orange';
-    default: return 'default';
-  }
-};
-
-const getConditionIcon = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'sentiment_very_satisfied';
-    case 'boa': return 'thumb_up';
-    case 'ruim': return 'warning';
-    default: return 'help';
-  }
-};
-
-const capitalize = (text: string) => {
-  if (!text) return '';
-  return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
 onMounted(() => {
