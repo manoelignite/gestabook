@@ -77,90 +77,11 @@
       </div>
     </div>
 
-    <!-- MODAL DE DETALHES DO NOTEBOOK (AO CLICAR EM UM ITEM DA LISTA) -->
-    <teleport to="body">
-      <transition name="modal-fade">
-        <div v-if="selectedNotebook" class="modal-overlay" @click.self="closeNotebookDetails">
-          <div class="modal-card m3-card m3-card--elevated">
-            <div class="m3-card__content">
-              <div class="modal-header">
-                <div class="modal-header-left">
-                  <div class="modal-icon">
-                    <span class="material-symbols" style="--md-sym-opsz: 32">laptop_mac</span>
-                  </div>
-                  <div>
-                    <span class="modal-category">Notebook</span>
-                    <h3 class="modal-title">{{ getBrandModelText(selectedNotebook) }}</h3>
-                  </div>
-                </div>
-                <button class="modal-close-btn" aria-label="Fechar" @click="closeNotebookDetails">
-                  <span class="material-symbols" style="--md-sym-opsz: 20">close</span>
-                </button>
-              </div>
-
-              <div class="modal-body-grid">
-                <div class="info-field">
-                  <span class="field-label">Marca</span>
-                  <span class="field-value">{{ selectedNotebook.brand || 'Não informada' }}</span>
-                </div>
-
-                <div class="info-field">
-                  <span class="field-label">Modelo</span>
-                  <span class="field-value">{{ selectedNotebook.model || 'Não informado' }}</span>
-                </div>
-
-                <div class="info-field">
-                  <span class="field-label">Número de Série (SN)</span>
-                  <span class="field-value monospace">{{ selectedNotebook.serialNumber || 'N/A' }}</span>
-                </div>
-
-                <div class="info-field">
-                  <span class="field-label">Carrinho</span>
-                  <span class="field-value highlight">
-                    <span class="material-symbols" style="--md-sym-opsz: 18">charger</span>
-                    {{ selectedNotebook.cart || 'Sem carrinho' }}
-                  </span>
-                </div>
-
-                <div class="info-field">
-                  <span class="field-label">Número</span>
-                  <span class="field-value">#{{ selectedNotebook.number ?? 'N/A' }}</span>
-                </div>
-
-                <div class="info-field">
-                  <span class="field-label">Condição</span>
-                  <FilterPill 
-                    :label="selectedNotebook.condition ? capitalize(selectedNotebook.condition) : 'Não informada'"
-                    :icon="getConditionIcon(selectedNotebook.condition)"
-                    :variant="getConditionVariant(selectedNotebook.condition)"
-                  />
-                </div>
-
-                <div class="info-field">
-                  <span class="field-label">Status de Manutenção</span>
-                  <FilterPill 
-                    :label="selectedNotebook.maintenance ? 'Em Manutenção' : 'Em Uso / Operacional'"
-                    :icon="selectedNotebook.maintenance ? 'build' : 'check_circle'"
-                    :variant="selectedNotebook.maintenance ? 'red' : 'green'"
-                  />
-                </div>
-
-                <div class="info-field full-width">
-                  <span class="field-label">ID do Documento (Firestore)</span>
-                  <span class="field-value monospace small">{{ selectedNotebook.id }}</span>
-                </div>
-              </div>
-
-              <div class="modal-actions">
-                <button class="m3-btn m3-btn--tonal" @click="closeNotebookDetails">
-                  Fechar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
-    </teleport>
+    <!-- MODAL DE DETALHES DO NOTEBOOK (COMPONENTE ISOLADO NotebookDetailModal) -->
+    <NotebookDetailModal 
+      :notebook="selectedNotebook" 
+      @close="closeNotebookDetails" 
+    />
   </div>
 </template>
 
@@ -170,6 +91,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../config/firebaseConfig';
 import FilterPill from '../../components/FilterPill.vue';
 import NotebookListItem from '../../components/NotebookListItem.vue';
+import NotebookDetailModal from '../../components/NotebookDetailModal.vue';
 
 interface Preset {
   label: string;
@@ -274,38 +196,6 @@ const openNotebookDetails = (item: any) => {
 
 const closeNotebookDetails = () => {
   selectedNotebook.value = null;
-};
-
-const getBrandModelText = (item: any) => {
-  const brand = item.brand || '';
-  const model = item.model || '';
-  if (brand && model) return `${brand} ${model}`;
-  if (brand) return brand;
-  if (model) return model;
-  return 'Notebook Sem Nome';
-};
-
-const getConditionVariant = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'green';
-    case 'boa': return 'blue';
-    case 'ruim': return 'orange';
-    default: return 'default';
-  }
-};
-
-const getConditionIcon = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'sentiment_very_satisfied';
-    case 'boa': return 'thumb_up';
-    case 'ruim': return 'warning';
-    default: return 'help';
-  }
-};
-
-const capitalize = (text: string) => {
-  if (!text) return '';
-  return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
 onMounted(() => {
