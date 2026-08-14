@@ -63,7 +63,7 @@
       <div v-if="filteredNotebooks.length > 0" class="notebooks-list">
         <NotebookListItem 
           v-for="item in filteredNotebooks" 
-          :key="item.id" 
+          :key="item.id || item.serialNumber" 
           :notebook="item"
           :selected-cart="selectedCart"
           @click="openNotebookDetails"

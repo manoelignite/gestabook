@@ -90,6 +90,7 @@ const handleCartClick = (event: MouseEvent) => {
       <!-- Pill de Carrinho -->
       <FilterPill 
         v-if="notebook.cart" 
+        :key="`cart-${notebook.id || notebook.serialNumber}`"
         :label="notebook.cart"
         icon="charger"
         :active="selectedCart === notebook.cart"
@@ -100,6 +101,7 @@ const handleCartClick = (event: MouseEvent) => {
       <!-- Pill de Condição -->
       <FilterPill 
         v-if="showAllPills"
+        :key="`condition-${notebook.id || notebook.serialNumber}`"
         :label="notebook.condition ? capitalize(notebook.condition) : 'N/A'"
         :icon="getConditionIcon(notebook.condition)"
         :variant="getConditionVariant(notebook.condition)"
@@ -108,6 +110,7 @@ const handleCartClick = (event: MouseEvent) => {
       <!-- Pill de Manutenção -->
       <FilterPill 
         v-if="showAllPills"
+        :key="`maint-${notebook.id || notebook.serialNumber}`"
         :label="notebook.maintenance ? 'Em Manutenção' : 'Operacional'"
         :icon="notebook.maintenance ? 'build' : 'check_circle'"
         :variant="notebook.maintenance ? 'red' : 'green'"

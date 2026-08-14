@@ -37,7 +37,7 @@
             <div v-if="recentNotebooks.length > 0" class="items-list">
               <NotebookListItem 
                 v-for="item in recentNotebooks" 
-                :key="item.id" 
+                :key="item.id || item.serialNumber" 
                 :notebook="item"
                 @click="navigateToNotebookList"
               />
