@@ -3,10 +3,6 @@
     <!-- CABEÇALHO COM FILTROS -->
     <div class="header-section">
       <div class="title-row">
-        <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="router.push('/equipment/list')">
-          <span class="material-symbols" style="--md-sym-opsz: 18">arrow_back</span>
-          <span>Voltar aos Equipamentos</span>
-        </button>
         <h2 class="page-title">Notebooks</h2>
       </div>
 
@@ -170,7 +166,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../config/firebaseConfig';
 import FilterPill from '../../components/FilterPill.vue';
@@ -182,7 +177,6 @@ interface Preset {
   model: string;
 }
 
-const router = useRouter();
 const equipments = ref<any[]>([]);
 const selectedNotebook = ref<any | null>(null);
 
