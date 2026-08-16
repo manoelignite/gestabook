@@ -10,15 +10,21 @@ export type NotebookItem = Notebook
 const props = withDefaults(defineProps<{
   notebook: Notebook
   selectedCart?: string | null
+  selectedCondition?: string | null
+  selectedMaintenance?: boolean | null
   showAllPills?: boolean
 }>(), {
   selectedCart: null,
+  selectedCondition: null,
+  selectedMaintenance: null,
   showAllPills: true
 })
 
 const emit = defineEmits<{
   (e: 'click', notebook: Notebook): void
   (e: 'cart-click', cart: string): void
+  (e: 'condition-click', condition: string): void
+  (e: 'maintenance-click', maintenance: boolean): void
 }>()
 
 const getBrandModelText = () => formatBrandModel(props.notebook)
@@ -28,6 +34,18 @@ const handleCartClick = (event: MouseEvent) => {
   if (props.notebook.cart) {
     emit('cart-click', props.notebook.cart)
   }
+}
+
+const handleConditionClick = (event: MouseEvent) => {
+  event.stopPropagation()
+  if (props.notebook.condition) {
+    emit('condition-click', props.notebook.condition)
+  }
+}
+
+const handleMaintenanceClick = (event: MouseEvent) => {
+  event.stopPropagation()
+  emit('maintenance-click', !!props.notebook.maintenance)
 }
 </script>
 
@@ -66,6 +84,9 @@ const handleCartClick = (event: MouseEvent) => {
         v-if="showAllPills"
         :key="`condition-${notebook.id || notebook.serialNumber}`"
         :condition="notebook.condition"
+        :active="selectedCondition === notebook.condition"
+        title="Filtrar por esta condição"
+        @click="handleConditionClick"
       />
 
       <!-- Pill de Manutenção -->
@@ -73,6 +94,9 @@ const handleCartClick = (event: MouseEvent) => {
         v-if="showAllPills"
         :key="`maint-${notebook.id || notebook.serialNumber}`"
         :maintenance="!!notebook.maintenance"
+        :active="selectedMaintenance === !!notebook.maintenance"
+        title="Filtrar por este status de manutenção"
+        @click="handleMaintenanceClick"
       />
     </div>
   </div>

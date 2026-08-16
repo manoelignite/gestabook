@@ -13,7 +13,7 @@
         <div class="pills-grid">
           <FilterPill 
             label="Todos"
-            :active="selectedCart === null && selectedPreset === null"
+            :active="!isFilterActive"
             @click="clearFilters"
           />
           <CartPill 
@@ -22,6 +22,37 @@
             :cart="cart"
             :active="selectedCart === cart"
             @click="toggleCartFilter(cart)"
+          />
+        </div>
+      </div>
+
+      <!-- Filtro por Condição -->
+      <div class="filter-group">
+        <span class="filter-label">Condição:</span>
+        <div class="pills-grid">
+          <ConditionPill 
+            v-for="cond in conditionOptions" 
+            :key="cond.value" 
+            :condition="cond.value"
+            :active="selectedCondition === cond.value"
+            @click="toggleConditionFilter(cond.value)"
+          />
+        </div>
+      </div>
+
+      <!-- Filtro por Status de Manutenção -->
+      <div class="filter-group">
+        <span class="filter-label">Manutenção:</span>
+        <div class="pills-grid">
+          <MaintenancePill 
+            :maintenance="false"
+            :active="selectedMaintenance === false"
+            @click="toggleMaintenanceFilter(false)"
+          />
+          <MaintenancePill 
+            :maintenance="true"
+            :active="selectedMaintenance === true"
+            @click="toggleMaintenanceFilter(true)"
           />
         </div>
       </div>
@@ -59,8 +90,12 @@
           :key="item.id || item.serialNumber" 
           :notebook="item"
           :selected-cart="selectedCart"
+          :selected-condition="selectedCondition"
+          :selected-maintenance="selectedMaintenance"
           @click="openNotebookDetails"
           @cart-click="toggleCartFilter"
+          @condition-click="toggleConditionFilter"
+          @maintenance-click="toggleMaintenanceFilter"
         />
       </div>
 
@@ -74,7 +109,7 @@
       </div>
     </div>
 
-    <!-- MODAL DE DETALHES DO NOTEBOOK (COMPONENTE ISOLADO NotebookDetailModal) -->
+    <!-- MODAL DE DETALHES DO NOTEBOOK -->
     <NotebookDetailModal 
       :notebook="selectedNotebook" 
       @close="closeNotebookDetails" 
@@ -87,20 +122,27 @@
 import { ref, computed, onMounted } from 'vue';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../config/firebaseConfig';
-import { FilterPill, CartPill } from '../../components/pills';
+import { FilterPill, CartPill, ConditionPill, MaintenancePill } from '../../components/pills';
 import NotebookListItem from '../../components/NotebookListItem.vue';
 import NotebookDetailModal from '../../components/NotebookDetailModal.vue';
-import { DEFAULT_CART_OPTIONS, MODEL_PRESETS, type NotebookPreset } from '../../types/notebook';
+import { 
+  DEFAULT_CART_OPTIONS, 
+  MODEL_PRESETS, 
+  CONDITION_OPTIONS,
+  type NotebookPreset 
+} from '../../types/notebook';
 
 const equipments = ref<any[]>([]);
 const selectedNotebook = ref<any | null>(null);
 
 const selectedCart = ref<string | null>(null);
 const selectedPreset = ref<NotebookPreset | null>(null);
+const selectedCondition = ref<string | null>(null);
+const selectedMaintenance = ref<boolean | null>(null);
 
 const cartOptions = DEFAULT_CART_OPTIONS;
 const modelPresets = MODEL_PRESETS;
-
+const conditionOptions = CONDITION_OPTIONS;
 
 const getAllEquipments = async () => {
   try {
@@ -116,17 +158,26 @@ const getAllEquipments = async () => {
 
 const notebooksOnly = computed(() => {
   return equipments.value.filter(item => {
-    if (!item.type) return true; // Tratamento para docs sem propriedade type
+    if (!item.type) return true;
     return item.type.toLowerCase() === 'notebook';
   });
 });
 
-const isFilterActive = computed(() => selectedCart.value !== null || selectedPreset.value !== null);
+const isFilterActive = computed(() => 
+  selectedCart.value !== null || 
+  selectedPreset.value !== null ||
+  selectedCondition.value !== null ||
+  selectedMaintenance.value !== null
+);
 
 const activeFilterText = computed(() => {
   const parts: string[] = [];
   if (selectedCart.value) parts.push(`Carrinho: ${selectedCart.value}`);
   if (selectedPreset.value) parts.push(`Modelo: ${selectedPreset.value.label}`);
+  if (selectedCondition.value) parts.push(`Condição: ${selectedCondition.value}`);
+  if (selectedMaintenance.value !== null) {
+    parts.push(`Manutenção: ${selectedMaintenance.value ? 'Sim' : 'Não'}`);
+  }
   return parts.join(' | ');
 });
 
@@ -141,6 +192,12 @@ const filteredNotebooks = computed(() => {
       if (!matchBrand && !matchModel) {
         return false;
       }
+    }
+    if (selectedCondition.value && (item.condition || '').toLowerCase() !== selectedCondition.value.toLowerCase()) {
+      return false;
+    }
+    if (selectedMaintenance.value !== null && !!item.maintenance !== selectedMaintenance.value) {
+      return false;
     }
     return true;
   });
@@ -162,9 +219,27 @@ const togglePresetFilter = (preset: NotebookPreset) => {
   }
 };
 
+const toggleConditionFilter = (condition: string) => {
+  if (selectedCondition.value === condition) {
+    selectedCondition.value = null;
+  } else {
+    selectedCondition.value = condition;
+  }
+};
+
+const toggleMaintenanceFilter = (maintenance: boolean) => {
+  if (selectedMaintenance.value === maintenance) {
+    selectedMaintenance.value = null;
+  } else {
+    selectedMaintenance.value = maintenance;
+  }
+};
+
 const clearFilters = () => {
   selectedCart.value = null;
   selectedPreset.value = null;
+  selectedCondition.value = null;
+  selectedMaintenance.value = null;
 };
 
 const openNotebookDetails = (item: any) => {
