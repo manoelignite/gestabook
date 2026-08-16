@@ -126,103 +126,125 @@ const handleSubmit = () => {
       <span>{{ errorMessage }}</span>
     </div>
 
-    <form @submit.prevent="handleSubmit" class="form-grid">
-      <div class="form-group">
-        <label for="notebookBrand">Marca</label>
-        <input 
-          id="notebookBrand" 
-          v-model="formState.brand" 
-          type="text" 
-          class="m3-input"
-          placeholder="Ex: Dell, Lenovo, HP"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="notebookModel">Modelo</label>
-        <input 
-          id="notebookModel" 
-          v-model="formState.model" 
-          type="text" 
-          class="m3-input"
-          placeholder="Ex: Latitude 5430"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="notebookSN">Número de Série (SN)</label>
-        <input 
-          id="notebookSN" 
-          v-model="formState.serialNumber" 
-          type="text" 
-          class="m3-input monospace"
-          placeholder="Ex: BR12345XX"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="notebookNumber">Número do Equipamento</label>
-        <input 
-          id="notebookNumber" 
-          v-model.number="formState.number" 
-          type="number" 
-          class="m3-input"
-          placeholder="Ex: 12"
-        />
-      </div>
-
-      <!-- Campo de Carrinho -->
-      <div class="form-group full-width">
-        <label>Identificação do Carrinho</label>
-        <div class="cart-selector-pills">
-          <CartPill 
-            v-for="cartOption in availableCartOptions" 
-            :key="cartOption" 
-            :cart="cartOption"
-            :active="isCartActive(cartOption)"
-            @click="formState.cart = cartOption"
-          />
+    <form @submit.prevent="handleSubmit" class="notebook-form">
+      <!-- SEÇÃO 1: DADOS DO EQUIPAMENTO -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="material-symbols section-icon">info</span>
+          <h3 class="section-title">Dados do Equipamento</h3>
         </div>
-        <input 
-          v-model="formState.cart" 
-          type="text" 
-          class="m3-input cart-custom-input"
-          placeholder="Ou digite o nome do carrinho..."
-          required
-        />
-      </div>
 
-      <!-- Campo de Condição -->
-      <div class="form-group full-width">
-        <label>Condição do Notebook</label>
-        <div class="condition-selector-pills">
-          <ConditionPill 
-            v-for="cond in conditionOptions" 
-            :key="cond.value" 
-            :condition="cond.value"
-            :active="isConditionActive(cond.value)"
-            @click="formState.condition = cond.value"
-          />
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="notebookBrand">Marca</label>
+            <input 
+              id="notebookBrand" 
+              v-model="formState.brand" 
+              type="text" 
+              class="m3-input"
+              placeholder="Ex: Dell, Lenovo, HP"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="notebookModel">Modelo</label>
+            <input 
+              id="notebookModel" 
+              v-model="formState.model" 
+              type="text" 
+              class="m3-input"
+              placeholder="Ex: Latitude 5430"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="notebookSN">Número de Série (SN)</label>
+            <input 
+              id="notebookSN" 
+              v-model="formState.serialNumber" 
+              type="text" 
+              class="m3-input monospace"
+              placeholder="Ex: BR12345XX"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="notebookNumber">Número do Equipamento</label>
+            <input 
+              id="notebookNumber" 
+              v-model.number="formState.number" 
+              type="number" 
+              class="m3-input"
+              placeholder="Ex: 12"
+            />
+          </div>
         </div>
       </div>
 
-      <!-- Status de Manutenção -->
-      <div class="form-group full-width">
-        <label>Status de Manutenção</label>
-        <div class="maintenance-selector-pills">
-          <MaintenancePill 
-            :maintenance="false"
-            :active="!formState.maintenance"
-            @click="formState.maintenance = false"
-          />
-          <MaintenancePill 
-            :maintenance="true"
-            :active="formState.maintenance"
-            @click="formState.maintenance = true"
-          />
+      <div class="section-divider"></div>
+
+      <!-- SEÇÃO 2: ALOCAÇÃO & ESTADO -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="material-symbols section-icon">tune</span>
+          <h3 class="section-title">Alocação & Estado</h3>
+        </div>
+
+        <div class="full-width-stack">
+          <!-- Campo de Carrinho -->
+          <div class="form-group full-width">
+            <label>Identificação do Carrinho</label>
+            <div class="cart-selector-pills" role="radiogroup" aria-label="Seleção do Carrinho">
+              <CartPill 
+                v-for="cartOption in availableCartOptions" 
+                :key="cartOption" 
+                :cart="cartOption"
+                :active="isCartActive(cartOption)"
+                @click="formState.cart = cartOption"
+              />
+            </div>
+            <input 
+              v-model="formState.cart" 
+              type="text" 
+              class="m3-input cart-custom-input"
+              placeholder="Ou digite o nome do carrinho..."
+              required
+            />
+          </div>
+
+          <!-- Campo de Condição -->
+          <div class="form-group full-width">
+            <label>Condição do Notebook</label>
+            <div class="condition-selector-pills" role="radiogroup" aria-label="Seleção da Condição">
+              <ConditionPill 
+                v-for="cond in conditionOptions" 
+                :key="cond.value" 
+                :condition="cond.value"
+                :active="isConditionActive(cond.value)"
+                @click="formState.condition = cond.value"
+              />
+            </div>
+          </div>
+
+          <!-- Status de Manutenção -->
+          <div class="form-group full-width">
+            <label>Status de Manutenção</label>
+            <div class="maintenance-selector-pills" role="radiogroup" aria-label="Status de Manutenção">
+              <MaintenancePill 
+                :maintenance="false"
+                :active="!formState.maintenance"
+                @click="formState.maintenance = false"
+              />
+              <MaintenancePill 
+                :maintenance="true"
+                :active="formState.maintenance"
+                @click="formState.maintenance = true"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -250,17 +272,69 @@ const handleSubmit = () => {
   width: 100%;
 }
 
+.notebook-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.section-icon {
+  font-size: 20px;
+  color: var(--md-sys-color-primary);
+}
+
+.section-title {
+  margin: 0;
+  font: var(--md-sys-typescale-title-small);
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.section-divider {
+  height: 1px;
+  background-color: var(--md-sys-color-outline-variant);
+  width: 100%;
+  margin: 2px 0;
+}
+
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 16px;
+  width: 100%;
+}
+
+.full-width-stack {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-  margin-bottom: 16px;
+  width: 100%;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
 }
 
 .form-group.full-width {
@@ -274,8 +348,9 @@ const handleSubmit = () => {
 }
 
 .m3-input {
+  width: 100%;
   height: 42px;
-  padding: 0 12px;
+  padding: 0 14px;
   border-radius: var(--md-sys-shape-small);
   border: 1px solid var(--md-sys-color-outline);
   background-color: var(--md-sys-color-surface);
@@ -301,7 +376,7 @@ const handleSubmit = () => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .cart-custom-input {
@@ -326,5 +401,7 @@ const handleSubmit = () => {
   gap: 12px;
   padding-top: 16px;
   border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin-top: 4px;
 }
 </style>
+

@@ -125,49 +125,12 @@ const resetForm = (lastSaved: Omit<Notebook, 'id'>) => {
   align-items: center;
   gap: 8px;
   width: 100%;
-  max-width: 480px;
+  max-width: 660px;
 }
 
-.presets-label {
-  font: var(--md-sys-typescale-label-medium);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.pills-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
-.pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  height: 34px;
-  border-radius: var(--md-sys-shape-full);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-  font: var(--md-sys-typescale-label-large);
-  cursor: pointer;
-  transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
-              box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-.pill-btn:hover {
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-  box-shadow: var(--md-sys-elevation-1);
-}
-
-.equipment-form {
+.form-wrapper {
   width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  max-width: 660px;
 }
 
 .m3-btn {

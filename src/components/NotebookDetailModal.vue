@@ -199,7 +199,7 @@ const close = () => {
 
 .modal-card {
   width: 100%;
-  max-width: 580px;
+  max-width: 660px;
   max-height: 90vh;
   overflow-y: auto;
   text-align: left;
