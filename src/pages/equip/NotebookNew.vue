@@ -1,40 +1,35 @@
 <template>
-  <div class="list-page-container">
-    <div class="page-header">
-      <h2 class="page-title">Cadastro de Notebook</h2>
-      <p class="page-subtitle">Preencha os dados do formulário para registrar um novo notebook no inventário</p>
+  <div class="m3-page-layout">
+    <div class="m3-page-header">
+      <h2 class="m3-page-header__title">Cadastro de Notebook</h2>
+      <p class="m3-page-header__subtitle">Preencha os dados abaixo para registrar um novo notebook no inventário</p>
     </div>
 
-    <div class="sections-list">
-      <section class="m3-card m3-card--elevated equipment-section-card">
-        <div class="m3-card__content">
-          <!-- BARRA DE PRESETS -->
-          <div class="presets-container">
-            <span class="presets-label">Preenchimento Rápido:</span>
-            <div class="pills-grid">
-              <FilterPill 
-                v-for="preset in MODEL_PRESETS" 
-                :key="preset.label" 
-                :label="preset.label" 
-                icon="laptop_mac" 
-                @click="applyPreset(preset.brand, preset.model)" 
-              />
-            </div>
-          </div>
+    <!-- BARRA DE PRESETS (Superfície M3 idêntica aos filtros) -->
+    <div class="m3-surface-card">
+      <span class="presets-label">Preenchimento Rápido:</span>
+      <div class="pills-grid">
+        <FilterPill 
+          v-for="preset in MODEL_PRESETS" 
+          :key="preset.label" 
+          :label="preset.label" 
+          icon="laptop_mac" 
+          @click="applyPreset(preset.brand, preset.model)" 
+        />
+      </div>
+    </div>
 
-          <div class="section-divider"></div>
+    <!-- SEÇÃO DO FORMULÁRIO -->
+    <div class="m3-page-content">
+      <p v-if="successMessage" class="feedback-message success">{{ successMessage }}</p>
 
-          <p v-if="successMessage" class="feedback-message success">{{ successMessage }}</p>
-
-          <NotebookForm 
-            mode="create" 
-            :notebook="notebook" 
-            :is-saving="isSubmitting" 
-            :error-message="errorMessage" 
-            @save="handleSubmit" 
-          />
-        </div>
-      </section>
+      <NotebookForm 
+        mode="create" 
+        :notebook="notebook" 
+        :is-saving="isSubmitting" 
+        :error-message="errorMessage" 
+        @save="handleSubmit" 
+      />
     </div>
   </div>
 </template>
@@ -116,57 +111,10 @@ const resetForm = (lastSaved: Omit<Notebook, 'id'>) => {
 </script>
 
 <style scoped>
-.list-page-container {
-  padding: 36px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  flex-grow: 1;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.page-header {
-  text-align: center;
-}
-
-.page-title {
-  margin: 0;
-  font: var(--md-sys-typescale-headline-medium);
-  color: var(--md-sys-color-on-surface);
-}
-
-.page-subtitle {
-  margin: 4px 0 0 0;
-  font: var(--md-sys-typescale-body-medium);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.sections-list {
-  width: 100%;
-  max-width: 840px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.equipment-section-card {
-  width: 100%;
-  text-align: left;
-  box-sizing: border-box;
-}
-
-.presets-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
 .presets-label {
   font: var(--md-sys-typescale-label-medium);
   color: var(--md-sys-color-on-surface-variant);
+  text-align: left;
 }
 
 .pills-grid {
@@ -175,17 +123,9 @@ const resetForm = (lastSaved: Omit<Notebook, 'id'>) => {
   gap: 8px;
 }
 
-.section-divider {
-  height: 1px;
-  background-color: var(--md-sys-color-outline-variant);
-  width: 100%;
-  margin-bottom: 24px;
-}
-
 .feedback-message {
   font: var(--md-sys-typescale-body-medium);
   text-align: center;
-  margin-bottom: 16px;
   padding: 10px 14px;
   border-radius: var(--md-sys-shape-small);
 }

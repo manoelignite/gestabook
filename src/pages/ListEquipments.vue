@@ -1,51 +1,49 @@
 <template>
-  <div class="list-page-container">
-    <div class="page-header">
-      <h2 class="page-title">Lista de Equipamentos</h2>
-      <p class="page-subtitle">Selecione uma categoria para visualizar a lista completa</p>
+  <div class="m3-page-layout">
+    <div class="m3-page-header">
+      <h2 class="m3-page-header__title">Lista de Equipamentos</h2>
+      <p class="m3-page-header__subtitle">Selecione uma categoria para visualizar a lista completa</p>
     </div>
 
-    <div class="sections-list">
+    <div class="m3-page-content">
       <!-- SEÇÃO DE NOTEBOOKS (CLICÁVEL - NAVEGA PARA /notebook/list VIA VUE-ROUTER) -->
       <section 
-        class="m3-card m3-card--elevated m3-card--interactive equipment-section-card" 
+        class="m3-surface-card m3-card--interactive equipment-section-card" 
         tabindex="0"
         @click="navigateToNotebookList"
       >
-        <div class="m3-card__content">
-          <div class="section-header">
-            <div class="header-main">
-              <div class="section-icon">
-                <span class="material-symbols" style="--md-sym-opsz: 28">laptop_mac</span>
-              </div>
-              <div class="section-titles">
-                <h3 class="section-title">Notebooks</h3>
-                <p class="section-subtitle">Gestão de notebooks e chromebooks</p>
-              </div>
+        <div class="section-header">
+          <div class="header-main">
+            <div class="section-icon">
+              <span class="material-symbols" style="--md-sym-opsz: 28">laptop_mac</span>
             </div>
-
-            <div class="header-action">
-              <span class="view-all-text">Ver todos</span>
-              <span class="material-symbols" style="--md-sym-opsz: 20">chevron_right</span>
+            <div class="section-titles">
+              <h3 class="section-title">Notebooks</h3>
+              <p class="section-subtitle">Gestão de notebooks e chromebooks</p>
             </div>
           </div>
 
-          <!-- LISTA DOS 3 ÚLTIMOS CADASTRADOS (FORMATO DE LISTA) -->
-          <div class="section-preview-list">
-            <span class="preview-label">Últimos 3 cadastrados:</span>
+          <div class="header-action">
+            <span class="view-all-text">Ver todos</span>
+            <span class="material-symbols" style="--md-sym-opsz: 20">chevron_right</span>
+          </div>
+        </div>
 
-            <div v-if="recentNotebooks.length > 0" class="items-list">
-              <NotebookListItem 
-                v-for="item in recentNotebooks" 
-                :key="item.id || item.serialNumber" 
-                :notebook="item"
-                @click="navigateToNotebookList"
-              />
-            </div>
+        <!-- LISTA DOS 3 ÚLTIMOS CADASTRADOS (FORMATO DE LISTA) -->
+        <div class="section-preview-list">
+          <span class="preview-label">Últimos 3 cadastrados:</span>
 
-            <div v-else class="empty-preview">
-              <p>Nenhum notebook cadastrado nesta seção.</p>
-            </div>
+          <div v-if="recentNotebooks.length > 0" class="items-list">
+            <NotebookListItem 
+              v-for="item in recentNotebooks" 
+              :key="item.id || item.serialNumber" 
+              :notebook="item"
+              @click="navigateToNotebookList"
+            />
+          </div>
+
+          <div v-else class="empty-preview">
+            <p>Nenhum notebook cadastrado nesta seção.</p>
           </div>
         </div>
       </section>

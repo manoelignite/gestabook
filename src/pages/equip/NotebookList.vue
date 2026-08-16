@@ -1,51 +1,49 @@
 <template>
-  <div class="notebook-list-page">
+  <div class="m3-page-layout">
     <!-- CABEÇALHO COM FILTROS -->
-    <div class="header-section">
-      <div class="title-row">
-        <h2 class="page-title">Notebooks</h2>
+    <div class="m3-page-header">
+      <h2 class="m3-page-header__title">Notebooks</h2>
+    </div>
+
+    <!-- SELETORES DE FILTRO (PILLS) -->
+    <div class="m3-surface-card">
+      <!-- Filtro por Carrinhos -->
+      <div class="filter-group">
+        <span class="filter-label">Carrinhos:</span>
+        <div class="pills-grid">
+          <FilterPill 
+            label="Todos"
+            :active="selectedCart === null && selectedPreset === null"
+            @click="clearFilters"
+          />
+          <CartPill 
+            v-for="cart in cartOptions" 
+            :key="cart" 
+            :cart="cart"
+            :active="selectedCart === cart"
+            @click="toggleCartFilter(cart)"
+          />
+        </div>
       </div>
 
-      <!-- SELETORES DE FILTRO (PILLS) -->
-      <div class="filters-container">
-        <!-- Filtro por Carrinhos -->
-        <div class="filter-group">
-          <span class="filter-label">Carrinhos:</span>
-          <div class="pills-grid">
-            <FilterPill 
-              label="Todos"
-              :active="selectedCart === null && selectedPreset === null"
-              @click="clearFilters"
-            />
-            <CartPill 
-              v-for="cart in cartOptions" 
-              :key="cart" 
-              :cart="cart"
-              :active="selectedCart === cart"
-              @click="toggleCartFilter(cart)"
-            />
-          </div>
-        </div>
-
-        <!-- Filtro por Marca / Modelo -->
-        <div class="filter-group">
-          <span class="filter-label">Modelos Frequentes:</span>
-          <div class="pills-grid">
-            <FilterPill 
-              v-for="preset in modelPresets" 
-              :key="preset.label" 
-              :label="preset.label"
-              icon="laptop_mac"
-              :active="selectedPreset?.label === preset.label"
-              @click="togglePresetFilter(preset)"
-            />
-          </div>
+      <!-- Filtro por Marca / Modelo -->
+      <div class="filter-group">
+        <span class="filter-label">Modelos Frequentes:</span>
+        <div class="pills-grid">
+          <FilterPill 
+            v-for="preset in modelPresets" 
+            :key="preset.label" 
+            :label="preset.label"
+            icon="laptop_mac"
+            :active="selectedPreset?.label === preset.label"
+            @click="togglePresetFilter(preset)"
+          />
         </div>
       </div>
     </div>
 
     <!-- LISTA COMPLETA DE NOTEBOOKS -->
-    <div class="list-section">
+    <div class="m3-page-content">
       <div class="list-info-bar">
         <span v-if="isFilterActive" class="info-text">
           Filtrando por: <strong>{{ activeFilterText }}</strong> ({{ filteredNotebooks.length }} encontrados)

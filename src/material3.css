@@ -459,3 +459,59 @@ body {
   box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
 }
 
+/* ==========================================================================
+   7. MODULAR PAGE LAYOUT & CONTAINER SYSTEM
+   ========================================================================== */
+.m3-page-layout {
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.m3-page-header {
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.m3-page-header__title {
+  margin: 0;
+  font: var(--md-sys-typescale-headline-medium);
+  color: var(--md-sys-color-on-surface);
+}
+
+.m3-page-header__subtitle {
+  margin: 0;
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3-surface-card {
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: var(--md-sys-color-surface-container-low);
+  padding: 20px;
+  border-radius: var(--md-sys-shape-medium);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  box-sizing: border-box;
+}
+
+.m3-page-content {
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+

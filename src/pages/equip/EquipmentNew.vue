@@ -1,46 +1,40 @@
 <template>
-  <div class="list-page-container">
-    <div class="page-header">
-      <h2 class="page-title">Cadastrar Equipamento</h2>
-      <p class="page-subtitle">Selecione uma categoria para cadastrar ou utilize o preenchimento rápido</p>
+  <div class="m3-page-layout">
+    <div class="m3-page-header">
+      <h2 class="m3-page-header__title">Cadastrar Equipamento</h2>
+      <p class="m3-page-header__subtitle">Selecione uma categoria para cadastrar ou utilize o preenchimento rápido</p>
     </div>
 
-    <div class="sections-list">
+    <div class="m3-page-content">
       <!-- Seção Notebooks -->
-      <section class="m3-card m3-card--elevated equipment-section-card">
-        <div class="m3-card__content">
-          <div class="section-header">
-            <div class="header-main">
-              <div class="section-icon">
-                <span class="material-symbols" style="--md-sym-opsz: 28">laptop_mac</span>
-              </div>
-              <div class="section-titles">
-                <h3 class="section-title">Notebooks</h3>
-                <p class="section-subtitle">Gestão e cadastro de notebooks e chromebooks</p>
-              </div>
-            </div>
+      <section class="m3-surface-card">
+        <div class="category-header">
+          <div class="category-icon">
+            <span class="material-symbols" style="--md-sym-opsz: 28">laptop_mac</span>
           </div>
-
-          <!-- Botão Principal -->
-          <div class="main-action">
-            <button class="m3-btn m3-btn--filled m3-btn--has-icon full-width" @click="goToNotebookNew()">
-              <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
-              <span>Cadastrar Novo Notebook</span>
-            </button>
+          <div class="category-titles">
+            <h3 class="category-title">Notebooks</h3>
+            <p class="category-subtitle">Gestão e cadastro de notebooks e chromebooks</p>
           </div>
+        </div>
 
-          <!-- Atalhos Diretos / Pills -->
-          <div class="presets-container">
-            <span class="presets-label">Comandos Diretos / Preenchimento Rápido:</span>
-            <div class="pills-grid">
-              <FilterPill 
-                v-for="preset in notebookPresets" 
-                :key="preset.label"
-                :label="preset.label"
-                :icon="preset.icon || 'laptop_mac'"
-                @click="goToNotebookNew(preset.brand, preset.model)"
-              />
-            </div>
+        <div class="main-action">
+          <button class="m3-btn m3-btn--filled m3-btn--has-icon full-width" @click="goToNotebookNew()">
+            <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
+            <span>Cadastrar Novo Notebook</span>
+          </button>
+        </div>
+
+        <div class="presets-block">
+          <span class="presets-label">Comandos Diretos / Preenchimento Rápido:</span>
+          <div class="pills-grid">
+            <FilterPill 
+              v-for="preset in notebookPresets" 
+              :key="preset.label"
+              :label="preset.label"
+              :icon="preset.icon || 'laptop_mac'"
+              @click="goToNotebookNew(preset.brand, preset.model)"
+            />
           </div>
         </div>
       </section>
@@ -70,63 +64,15 @@ const goToNotebookNew = (brand?: string, model?: string) => {
 </script>
 
 <style scoped>
-.list-page-container {
-  padding: 36px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  flex-grow: 1;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.page-header {
-  text-align: center;
-}
-
-.page-title {
-  margin: 0;
-  font: var(--md-sys-typescale-headline-medium);
-  color: var(--md-sys-color-on-surface);
-}
-
-.page-subtitle {
-  margin: 4px 0 0 0;
-  font: var(--md-sys-typescale-body-medium);
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.sections-list {
-  width: 100%;
-  max-width: 840px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.equipment-section-card {
-  width: 100%;
-  text-align: left;
-  box-sizing: border-box;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
-  margin-bottom: 20px;
-}
-
-.header-main {
+.category-header {
   display: flex;
   align-items: center;
   gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.section-icon {
+.category-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,44 +81,46 @@ const goToNotebookNew = (brand?: string, model?: string) => {
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   border-radius: var(--md-sys-shape-medium);
+  flex-shrink: 0;
 }
 
-.section-titles {
+.category-titles {
   display: flex;
   flex-direction: column;
 }
 
-.section-title {
+.category-title {
   margin: 0;
   font: var(--md-sys-typescale-title-large);
   color: var(--md-sys-color-on-surface);
 }
 
-.section-subtitle {
+.category-subtitle {
   margin: 2px 0 0 0;
   font: var(--md-sys-typescale-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .main-action {
-  margin-bottom: 20px;
+  width: 100%;
 }
 
 .full-width {
   width: 100%;
 }
 
-.presets-container {
+.presets-block {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-top: 16px;
+  gap: 10px;
+  padding-top: 12px;
   border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .presets-label {
   font: var(--md-sys-typescale-label-medium);
   color: var(--md-sys-color-on-surface-variant);
+  text-align: left;
 }
 
 .pills-grid {
