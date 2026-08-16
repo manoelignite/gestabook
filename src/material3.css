@@ -432,3 +432,30 @@ body {
   justify-content: flex-end;
   margin-top: auto;
 }
+
+/* ==========================================================================
+   6. INPUT & TEXT FIELD COMPONENTS
+   ========================================================================== */
+.m3-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: var(--md-sys-shape-small);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-body-medium);
+  box-sizing: border-box;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.m3-input:hover:not(:focus) {
+  border-color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3-input:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
+}
+

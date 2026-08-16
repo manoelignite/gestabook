@@ -352,12 +352,16 @@ const handleSubmit = () => {
   height: 42px;
   padding: 0 14px;
   border-radius: var(--md-sys-shape-small);
-  border: 1px solid var(--md-sys-color-outline);
+  border: 1px solid var(--md-sys-color-outline-variant);
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
   font: var(--md-sys-typescale-body-medium);
   box-sizing: border-box;
   transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.m3-input:hover:not(:focus) {
+  border-color: var(--md-sys-color-on-surface-variant);
 }
 
 .m3-input:focus {
