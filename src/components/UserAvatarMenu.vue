@@ -12,6 +12,7 @@ const menuRef = ref<HTMLElement | null>(null)
 const user = computed(() => authStore.user)
 const userPhoto = computed(() => user.value?.photoURL)
 const userEmail = computed(() => user.value?.email || '')
+const isAdmin = computed(() => authStore.role === 'admin')
 
 // Retorna apenas o primeiro e o último nome do usuário
 const userFirstAndLastName = computed(() => {
@@ -43,6 +44,11 @@ const closeMenu = (event: MouseEvent) => {
   if (menuRef.value && !menuRef.value.contains(event.target as Node)) {
     isOpen.value = false
   }
+}
+
+const goToAdmin = () => {
+  isOpen.value = false
+  router.push('/admin')
 }
 
 const handleLogout = async () => {
@@ -91,8 +97,18 @@ onUnmounted(() => {
 
         <div class="menu-divider"></div>
 
-        <!-- 2. Menu (Reservado para futuros itens de navegação/ações) -->
-        <!-- Omitido temporariamente por estar vazio -->
+        <!-- 2. Menu de Ações (Apenas para administradores) -->
+        <div v-if="isAdmin" class="menu-body">
+          <button 
+            class="menu-item-btn m3-btn m3-btn--tonal m3-btn--has-icon" 
+            @click="goToAdmin"
+          >
+            <span class="material-symbols" style="--md-sym-opsz: 18">admin_panel_settings</span>
+            <span>Gerenciar Whitelist</span>
+          </button>
+        </div>
+
+        <div v-if="isAdmin" class="menu-divider"></div>
 
         <!-- 3. Footer: Botão de Sair -->
         <div class="dropdown-footer">
@@ -223,6 +239,21 @@ onUnmounted(() => {
   height: 1px;
   background-color: var(--md-sys-color-outline-variant, #CAC4D0);
   margin: 2px 0;
+}
+
+.menu-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-item-btn {
+  width: 100%;
+  justify-content: flex-start;
+  height: 38px;
+  font-size: 13px;
+  padding: 0 12px;
+  border-radius: var(--md-sys-shape-small, 8px);
 }
 
 .dropdown-footer {

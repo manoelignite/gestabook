@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import AdminNavButtons from './AdminNavButtons.vue'
 
 const router = useRouter()
 </script>
@@ -17,7 +16,6 @@ const router = useRouter()
           <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
           <span>Cadastrar Equipamento</span>
         </button>
-        <AdminNavButtons />
       </div>
     </div>
   </nav>
