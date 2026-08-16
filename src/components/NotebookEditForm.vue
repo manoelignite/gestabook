@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import FilterPill from './FilterPill.vue'
 import type { NotebookItem } from './NotebookListItem.vue'
 
@@ -24,7 +24,7 @@ const editForm = ref({
   maintenance: false
 })
 
-const cartOptions = [
+const defaultCartOptions = [
   'Carrinho 1',
   'Carrinho 2',
   'Carrinho 3',
@@ -36,11 +36,30 @@ const cartOptions = [
   'DS-MB'
 ]
 
+const availableCartOptions = computed(() => {
+  const options = [...defaultCartOptions]
+  const currentCart = editForm.value.cart?.trim()
+  if (currentCart && !options.some(opt => opt.trim().toLowerCase() === currentCart.toLowerCase())) {
+    options.push(currentCart)
+  }
+  return options
+})
+
+const isCartActive = (option: string) => {
+  if (!editForm.value.cart) return false
+  return editForm.value.cart.trim().toLowerCase() === option.trim().toLowerCase()
+}
+
 const conditionOptions = [
   { label: 'Excelente', value: 'excelente', variant: 'green' as const, icon: 'sentiment_very_satisfied' },
   { label: 'Boa', value: 'boa', variant: 'blue' as const, icon: 'thumb_up' },
   { label: 'Ruim', value: 'ruim', variant: 'orange' as const, icon: 'warning' }
 ]
+
+const isConditionActive = (condValue: string) => {
+  if (!editForm.value.condition) return false
+  return editForm.value.condition.trim().toLowerCase() === condValue.trim().toLowerCase()
+}
 
 const initEditForm = () => {
   if (props.notebook) {
@@ -50,7 +69,7 @@ const initEditForm = () => {
       serialNumber: props.notebook.serialNumber !== undefined && props.notebook.serialNumber !== null ? String(props.notebook.serialNumber) : '',
       cart: props.notebook.cart !== undefined && props.notebook.cart !== null ? String(props.notebook.cart) : 'Carrinho 1',
       number: props.notebook.number ?? null,
-      condition: props.notebook.condition || 'excelente',
+      condition: props.notebook.condition ? String(props.notebook.condition).toLowerCase() : 'excelente',
       maintenance: !!props.notebook.maintenance
     }
   }
@@ -58,7 +77,7 @@ const initEditForm = () => {
 
 watch(() => props.notebook, () => {
   initEditForm()
-}, { immediate: true })
+}, { immediate: true, deep: true })
 
 const handleSubmit = () => {
   emit('save', {
@@ -133,11 +152,11 @@ const handleSubmit = () => {
         <label>Identificação do Carrinho</label>
         <div class="cart-selector-pills">
           <FilterPill 
-            v-for="cartOption in cartOptions" 
+            v-for="cartOption in availableCartOptions" 
             :key="cartOption" 
             :label="cartOption"
             icon="charger"
-            :active="editForm.cart === cartOption"
+            :active="isCartActive(cartOption)"
             @click="editForm.cart = cartOption"
           />
         </div>
@@ -160,7 +179,7 @@ const handleSubmit = () => {
             :label="cond.label"
             :icon="cond.icon"
             :variant="cond.variant"
-            :active="editForm.condition === cond.value"
+            :active="isConditionActive(cond.value)"
             @click="editForm.condition = cond.value"
           />
         </div>
