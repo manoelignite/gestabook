@@ -1,29 +1,40 @@
 <template>
-  <div class="form-page-container">
-    <h2 class="form-title">Cadastro de Notebook</h2>
-    
-    <div class="presets-bar">
-      <span class="presets-label">Preenchimento Rápido:</span>
-      <div class="pills-grid">
-        <FilterPill 
-          v-for="preset in MODEL_PRESETS" 
-          :key="preset.label" 
-          :label="preset.label" 
-          icon="laptop_mac" 
-          @click="applyPreset(preset.brand, preset.model)" 
-        />
-      </div>
+  <div class="list-page-container">
+    <div class="page-header">
+      <h2 class="page-title">Cadastro de Notebook</h2>
+      <p class="page-subtitle">Preencha os dados do formulário para registrar um novo notebook no inventário</p>
     </div>
 
-    <div class="form-wrapper">
-      <p v-if="successMessage" class="feedback-message success">{{ successMessage }}</p>
-      <NotebookForm 
-        mode="create" 
-        :notebook="notebook" 
-        :is-saving="isSubmitting" 
-        :error-message="errorMessage" 
-        @save="handleSubmit" 
-      />
+    <div class="sections-list">
+      <section class="m3-card m3-card--elevated equipment-section-card">
+        <div class="m3-card__content">
+          <!-- BARRA DE PRESETS -->
+          <div class="presets-container">
+            <span class="presets-label">Preenchimento Rápido:</span>
+            <div class="pills-grid">
+              <FilterPill 
+                v-for="preset in MODEL_PRESETS" 
+                :key="preset.label" 
+                :label="preset.label" 
+                icon="laptop_mac" 
+                @click="applyPreset(preset.brand, preset.model)" 
+              />
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <p v-if="successMessage" class="feedback-message success">{{ successMessage }}</p>
+
+          <NotebookForm 
+            mode="create" 
+            :notebook="notebook" 
+            :is-saving="isSubmitting" 
+            :error-message="errorMessage" 
+            @save="handleSubmit" 
+          />
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -105,90 +116,89 @@ const resetForm = (lastSaved: Omit<Notebook, 'id'>) => {
 </script>
 
 <style scoped>
-.form-page-container {
-  padding: 48px 24px;
+.list-page-container {
+  padding: 36px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
   flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.form-title {
+.page-header {
+  text-align: center;
+}
+
+.page-title {
+  margin: 0;
   font: var(--md-sys-typescale-headline-medium);
   color: var(--md-sys-color-on-surface);
 }
 
-.presets-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 660px;
-}
-
-.form-wrapper {
-  width: 100%;
-  max-width: 660px;
-}
-
-.m3-btn {
-  margin-top: 12px;
-  width: 100%;
-}
-
-.feedback-message {
+.page-subtitle {
+  margin: 4px 0 0 0;
   font: var(--md-sys-typescale-body-medium);
-  text-align: center;
-  margin-top: 8px;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.feedback-message.success {
-  color: var(--md-sys-color-primary);
-}
-
-.feedback-message.error {
-  color: var(--md-sys-color-error);
-}
-
-.cart-field-container {
+.sections-list {
+  width: 100%;
+  max-width: 840px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 20px;
 }
 
-.cart-pills-grid {
+.equipment-section-card {
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.presets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.presets-label {
+  font: var(--md-sys-typescale-label-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.pills-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.cart-pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  height: 32px;
-  border-radius: var(--md-sys-shape-full);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background-color: var(--md-sys-color-surface-container);
-  color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-medium);
-  cursor: pointer;
-  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
+.section-divider {
+  height: 1px;
+  background-color: var(--md-sys-color-outline-variant);
+  width: 100%;
+  margin-bottom: 24px;
 }
 
-.cart-pill-btn:hover {
-  background-color: var(--md-sys-color-surface-container-high);
-  color: var(--md-sys-color-on-surface);
+.feedback-message {
+  font: var(--md-sys-typescale-body-medium);
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: var(--md-sys-shape-small);
 }
 
-.cart-pill-btn.active {
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  border-color: var(--md-sys-color-primary);
-  font-weight: 600;
-  box-shadow: var(--md-sys-elevation-1);
+.feedback-message.success {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #C8E6C9;
+}
+
+.feedback-message.error {
+  background-color: #FFEBEE;
+  color: #C62828;
+  border: 1px solid #FFCDD2;
 }
 </style>

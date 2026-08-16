@@ -1,14 +1,23 @@
 <template>
-  <div class="form-page-container">
-    <div class="sections-container">
+  <div class="list-page-container">
+    <div class="page-header">
+      <h2 class="page-title">Cadastrar Equipamento</h2>
+      <p class="page-subtitle">Selecione uma categoria para cadastrar ou utilize o preenchimento rápido</p>
+    </div>
+
+    <div class="sections-list">
       <!-- Seção Notebooks -->
-      <section class="m3-card m3-card--elevated equipment-section">
+      <section class="m3-card m3-card--elevated equipment-section-card">
         <div class="m3-card__content">
           <div class="section-header">
-            <span class="material-symbols icon-primary" style="--md-sym-opsz: 32">laptop_mac</span>
-            <div>
-              <h2 class="section-title">Notebooks</h2>
-              <p class="section-subtitle">Gestão e cadastro de notebooks e chromebooks</p>
+            <div class="header-main">
+              <div class="section-icon">
+                <span class="material-symbols" style="--md-sym-opsz: 28">laptop_mac</span>
+              </div>
+              <div class="section-titles">
+                <h3 class="section-title">Notebooks</h3>
+                <p class="section-subtitle">Gestão e cadastro de notebooks e chromebooks</p>
+              </div>
             </div>
           </div>
 
@@ -16,7 +25,7 @@
           <div class="main-action">
             <button class="m3-btn m3-btn--filled m3-btn--has-icon full-width" @click="goToNotebookNew()">
               <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
-              <span>Cadastrar Notebook</span>
+              <span>Cadastrar Novo Notebook</span>
             </button>
           </div>
 
@@ -48,7 +57,6 @@ const router = useRouter()
 
 const notebookPresets = MODEL_PRESETS
 
-
 const goToNotebookNew = (brand?: string, model?: string) => {
   if (brand && model) {
     router.push({
@@ -62,56 +70,92 @@ const goToNotebookNew = (brand?: string, model?: string) => {
 </script>
 
 <style scoped>
-.form-page-container {
-  padding: 48px 24px;
+.list-page-container {
+  padding: 36px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.form-title {
-  font: var(--md-sys-typescale-headline-medium);
-  color: var(--md-sys-color-on-surface);
+.page-header {
   text-align: center;
 }
 
-.sections-container {
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.page-title {
+  margin: 0;
+  font: var(--md-sys-typescale-headline-medium);
+  color: var(--md-sys-color-on-surface);
 }
 
-.equipment-section {
+.page-subtitle {
+  margin: 4px 0 0 0;
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.sections-list {
   width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.equipment-section-card {
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
 }
 
 .section-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
   margin-bottom: 20px;
 }
 
-.icon-primary {
-  color: var(--md-sys-color-primary);
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--md-sys-shape-medium);
+}
+
+.section-titles {
+  display: flex;
+  flex-direction: column;
 }
 
 .section-title {
+  margin: 0;
   font: var(--md-sys-typescale-title-large);
   color: var(--md-sys-color-on-surface);
 }
 
 .section-subtitle {
-  font: var(--md-sys-typescale-body-medium);
+  margin: 2px 0 0 0;
+  font: var(--md-sys-typescale-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .main-action {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .full-width {
@@ -135,34 +179,5 @@ const goToNotebookNew = (brand?: string, model?: string) => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-
-/* Estilo Pill / Chip com cor de acento mais clara (M3 Container Role) */
-.pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  height: 36px;
-  border-radius: var(--md-sys-shape-full);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-  font: var(--md-sys-typescale-label-large);
-  cursor: pointer;
-  transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
-              box-shadow 200ms cubic-bezier(0.2, 0, 0, 1),
-              transform 100ms ease;
-}
-
-.pill-btn:hover {
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-  box-shadow: var(--md-sys-elevation-1);
-  transform: translateY(-1px);
-}
-
-.pill-btn:active {
-  transform: translateY(0);
 }
 </style>
