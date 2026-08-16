@@ -34,7 +34,10 @@ onUnmounted(() => {
         <span>Voltar</span>
       </button>
     </div>
-    <h1 class="header-title">Gestabook_</h1>
+    <h1 class="header-title">
+      <span>Gestabook</span>
+      <span class="brand-underscore">_</span>
+    </h1>
     <div class="header-right">
       <UserAvatarMenu />
     </div>
@@ -81,6 +84,13 @@ onUnmounted(() => {
   white-space: nowrap;
   pointer-events: none;
   z-index: 1;
+}
+
+.brand-underscore {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  color: var(--md-sys-color-primary);
 }
 
 @media (display-mode: window-controls-overlay) {
