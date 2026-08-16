@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import FilterPill from './FilterPill.vue'
+import { CartPill, ConditionPill, MaintenancePill } from './pills'
 import { 
   DEFAULT_CART_OPTIONS, 
   CONDITION_OPTIONS, 
@@ -47,7 +47,6 @@ const conditionOptions = CONDITION_OPTIONS
 
 const isConditionActive = (condValue: string) => {
   if (!editForm.value.condition) return false
-
   return editForm.value.condition.trim().toLowerCase() === condValue.trim().toLowerCase()
 }
 
@@ -141,11 +140,10 @@ const handleSubmit = () => {
       <div class="form-group full-width">
         <label>Identificação do Carrinho</label>
         <div class="cart-selector-pills">
-          <FilterPill 
+          <CartPill 
             v-for="cartOption in availableCartOptions" 
             :key="cartOption" 
-            :label="cartOption"
-            icon="charger"
+            :cart="cartOption"
             :active="isCartActive(cartOption)"
             @click="editForm.cart = cartOption"
           />
@@ -163,12 +161,10 @@ const handleSubmit = () => {
       <div class="form-group full-width">
         <label>Condição do Notebook</label>
         <div class="condition-selector-pills">
-          <FilterPill 
+          <ConditionPill 
             v-for="cond in conditionOptions" 
             :key="cond.value" 
-            :label="cond.label"
-            :icon="cond.icon"
-            :variant="cond.variant"
+            :condition="cond.value"
             :active="isConditionActive(cond.value)"
             @click="editForm.condition = cond.value"
           />
@@ -179,17 +175,13 @@ const handleSubmit = () => {
       <div class="form-group full-width">
         <label>Status de Manutenção</label>
         <div class="maintenance-selector-pills">
-          <FilterPill 
-            label="Operacional"
-            icon="check_circle"
-            variant="green"
+          <MaintenancePill 
+            :maintenance="false"
             :active="!editForm.maintenance"
             @click="editForm.maintenance = false"
           />
-          <FilterPill 
-            label="Em Manutenção"
-            icon="build"
-            variant="red"
+          <MaintenancePill 
+            :maintenance="true"
             :active="editForm.maintenance"
             @click="editForm.maintenance = true"
           />

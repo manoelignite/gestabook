@@ -50,11 +50,10 @@
       <div class="cart-field-container">
         <label for="notebookCart">Identificação do Carrinho</label>
         <div class="cart-pills-grid">
-          <FilterPill 
+          <CartPill 
             v-for="option in cartOptions" 
             :key="option" 
-            :label="option" 
-            icon="charger" 
+            :cart="option"
             :active="notebook.cart === option" 
             @click="notebook.cart = option"
           />
@@ -123,7 +122,7 @@ import { useRoute } from 'vue-router'
 import { addDoc, collection } from 'firebase/firestore'
 import { database } from '../../config/firebaseConfig'
 import { DEFAULT_CART_OPTIONS, type Notebook, type NotebookCondition } from '../../types/notebook'
-import FilterPill from '../../components/FilterPill.vue'
+import { FilterPill, CartPill } from '../../components/pills'
 
 const route = useRoute()
 

@@ -17,11 +17,10 @@
               :active="selectedCart === null && selectedPreset === null"
               @click="clearFilters"
             />
-            <FilterPill 
+            <CartPill 
               v-for="cart in cartOptions" 
               :key="cart" 
-              :label="cart"
-              icon="charger"
+              :cart="cart"
               :active="selectedCart === cart"
               @click="toggleCartFilter(cart)"
             />
@@ -90,7 +89,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../config/firebaseConfig';
-import FilterPill from '../../components/FilterPill.vue';
+import { FilterPill, CartPill } from '../../components/pills';
 import NotebookListItem from '../../components/NotebookListItem.vue';
 import NotebookDetailModal from '../../components/NotebookDetailModal.vue';
 import { DEFAULT_CART_OPTIONS, MODEL_PRESETS, type NotebookPreset } from '../../types/notebook';

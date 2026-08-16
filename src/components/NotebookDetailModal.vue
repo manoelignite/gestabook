@@ -2,13 +2,11 @@
 import { ref, watch } from 'vue'
 import { doc, updateDoc } from 'firebase/firestore'
 import { database } from '../config/firebaseConfig'
-import FilterPill from './FilterPill.vue'
+import { ConditionPill, MaintenancePill } from './pills'
 import NotebookEditForm from './NotebookEditForm.vue'
 import { 
   type Notebook, 
-  getBrandModelText as formatBrandModel, 
-  getConditionVariant as formatConditionVariant, 
-  getConditionIcon as formatConditionIcon 
+  getBrandModelText as formatBrandModel 
 } from '../types/notebook'
 
 const props = defineProps<{
@@ -62,14 +60,6 @@ const saveChanges = async (formData: Omit<Notebook, 'id'>) => {
 }
 
 const getBrandModelText = (item: Notebook) => formatBrandModel(item)
-const getConditionVariant = (condition?: string) => formatConditionVariant(condition)
-const getConditionIcon = (condition?: string) => formatConditionIcon(condition)
-
-const capitalize = (text?: string) => {
-  if (!text) return ''
-  return text.charAt(0).toUpperCase() + text.slice(1)
-}
-
 
 const close = () => {
   if (isSaving.value) return
@@ -132,20 +122,12 @@ const close = () => {
 
                 <div class="info-field">
                   <span class="field-label">Condição</span>
-                  <FilterPill 
-                    :label="notebook.condition ? capitalize(notebook.condition) : 'Não informada'"
-                    :icon="getConditionIcon(notebook.condition)"
-                    :variant="getConditionVariant(notebook.condition)"
-                  />
+                  <ConditionPill :condition="notebook.condition" />
                 </div>
 
                 <div class="info-field">
                   <span class="field-label">Status de Manutenção</span>
-                  <FilterPill 
-                    :label="notebook.maintenance ? 'Em Manutenção' : 'Em Uso / Operacional'"
-                    :icon="notebook.maintenance ? 'build' : 'check_circle'"
-                    :variant="notebook.maintenance ? 'red' : 'green'"
-                  />
+                  <MaintenancePill :maintenance="!!notebook.maintenance" />
                 </div>
 
                 <div class="info-field full-width">

@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import FilterPill from '../../components/FilterPill.vue'
+import { FilterPill } from '../../components/pills'
 import { MODEL_PRESETS } from '../../types/notebook'
 
 const router = useRouter()

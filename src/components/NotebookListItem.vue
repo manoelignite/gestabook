@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import FilterPill from './FilterPill.vue'
+import { CartPill, ConditionPill, MaintenancePill } from './pills'
 import { 
   type Notebook, 
-  getBrandModelText as formatBrandModel, 
-  getConditionVariant as formatConditionVariant, 
-  getConditionIcon as formatConditionIcon 
+  getBrandModelText as formatBrandModel 
 } from '../types/notebook'
 
 export type NotebookItem = Notebook
@@ -24,14 +22,6 @@ const emit = defineEmits<{
 }>()
 
 const getBrandModelText = () => formatBrandModel(props.notebook)
-const getConditionVariant = (condition?: string) => formatConditionVariant(condition)
-const getConditionIcon = (condition?: string) => formatConditionIcon(condition)
-
-const capitalize = (text?: string) => {
-  if (!text) return ''
-  return text.charAt(0).toUpperCase() + text.slice(1)
-}
-
 
 const handleCartClick = (event: MouseEvent) => {
   event.stopPropagation()
@@ -62,32 +52,27 @@ const handleCartClick = (event: MouseEvent) => {
 
     <div class="item-pills">
       <!-- Pill de Carrinho -->
-      <FilterPill 
+      <CartPill 
         v-if="notebook.cart" 
         :key="`cart-${notebook.id || notebook.serialNumber}`"
-        :label="notebook.cart"
-        icon="charger"
+        :cart="notebook.cart"
         :active="selectedCart === notebook.cart"
         title="Filtrar por este carrinho"
         @click="handleCartClick"
       />
 
       <!-- Pill de Condição -->
-      <FilterPill 
+      <ConditionPill 
         v-if="showAllPills"
         :key="`condition-${notebook.id || notebook.serialNumber}`"
-        :label="notebook.condition ? capitalize(notebook.condition) : 'N/A'"
-        :icon="getConditionIcon(notebook.condition)"
-        :variant="getConditionVariant(notebook.condition)"
+        :condition="notebook.condition"
       />
 
       <!-- Pill de Manutenção -->
-      <FilterPill 
+      <MaintenancePill 
         v-if="showAllPills"
         :key="`maint-${notebook.id || notebook.serialNumber}`"
-        :label="notebook.maintenance ? 'Em Manutenção' : 'Operacional'"
-        :icon="notebook.maintenance ? 'build' : 'check_circle'"
-        :variant="notebook.maintenance ? 'red' : 'green'"
+        :maintenance="!!notebook.maintenance"
       />
     </div>
   </div>
