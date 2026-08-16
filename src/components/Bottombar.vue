@@ -8,15 +8,17 @@ const router = useRouter()
 <template>
   <nav class="bottom-nav-bar">
     <div class="nav-scroll-container">
-      <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/equipment/list')">
-        <span class="material-symbols" style="--md-sym-opsz: 18">devices</span>
-        <span>Listar Equipamentos</span>
-      </button>
-      <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/equipment/new')">
-        <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
-        <span>Cadastrar Equipamento</span>
-      </button>
-      <AdminNavButtons />
+      <div class="nav-content-wrapper">
+        <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/equipment/list')">
+          <span class="material-symbols" style="--md-sym-opsz: 18">devices</span>
+          <span>Listar Equipamentos</span>
+        </button>
+        <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/equipment/new')">
+          <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
+          <span>Cadastrar Equipamento</span>
+        </button>
+        <AdminNavButtons />
+      </div>
     </div>
   </nav>
 </template>
@@ -39,26 +41,26 @@ const router = useRouter()
 .nav-scroll-container {
   display: flex;
   align-items: center;
-  gap: 8px;
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding: 4px 4px;
+  padding: 4px 12px;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
-  justify-content: flex-start;
 }
 
 .nav-scroll-container::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Edge */
 }
 
-@media (min-width: 960px) {
-  .nav-scroll-container {
-    justify-content: center;
-  }
+.nav-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+  flex-shrink: 0;
 }
 
 :deep(.nav-item-btn),
@@ -74,4 +76,3 @@ const router = useRouter()
   flex-shrink: 0;
 }
 </style>
-
