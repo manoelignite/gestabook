@@ -1,14 +1,60 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+import { doc, updateDoc } from 'firebase/firestore'
+import { database } from '../config/firebaseConfig'
 import FilterPill from './FilterPill.vue'
+import NotebookEditForm from './NotebookEditForm.vue'
 import type { NotebookItem } from './NotebookListItem.vue'
 
-defineProps<{
+const props = defineProps<{
   notebook: NotebookItem | null
 }>()
 
 const emit = defineEmits<{
   (e: 'close'): void
+  (e: 'updated'): void
 }>()
+
+const isEditing = ref(false)
+const isSaving = ref(false)
+const errorMessage = ref<string | null>(null)
+
+watch(() => props.notebook, () => {
+  isEditing.value = false
+  errorMessage.value = null
+}, { immediate: true })
+
+const startEditing = () => {
+  errorMessage.value = null
+  isEditing.value = true
+}
+
+const cancelEditing = () => {
+  isEditing.value = false
+  errorMessage.value = null
+}
+
+const saveChanges = async (formData: Omit<NotebookItem, 'id'>) => {
+  if (!props.notebook?.id) return
+
+  try {
+    isSaving.value = true
+    errorMessage.value = null
+
+    const docRef = doc(database, 'equipments', props.notebook.id)
+    await updateDoc(docRef, formData as any)
+
+    Object.assign(props.notebook, formData)
+
+    isEditing.value = false
+    emit('updated')
+  } catch (error: any) {
+    console.error('Erro ao salvar alterações do notebook:', error)
+    errorMessage.value = 'Erro ao salvar alterações. Tente novamente.'
+  } finally {
+    isSaving.value = false
+  }
+}
 
 const getBrandModelText = (item: NotebookItem) => {
   const brand = item.brand || ''
@@ -43,6 +89,8 @@ const capitalize = (text?: string) => {
 }
 
 const close = () => {
+  if (isSaving.value) return
+  isEditing.value = false
   emit('close')
 }
 </script>
@@ -53,79 +101,112 @@ const close = () => {
       <div v-if="notebook" class="modal-overlay" @click.self="close">
         <div class="modal-card m3-card m3-card--elevated">
           <div class="m3-card__content">
-            <div class="modal-header">
-              <div class="modal-header-left">
-                <div class="modal-icon">
-                  <span class="material-symbols" style="--md-sym-opsz: 32">laptop_mac</span>
+            <!-- MODO DE LEITURA -->
+            <template v-if="!isEditing">
+              <div class="modal-header">
+                <div class="modal-header-left">
+                  <div class="modal-icon">
+                    <span class="material-symbols" style="--md-sym-opsz: 32">laptop_mac</span>
+                  </div>
+                  <div>
+                    <span class="modal-category">Notebook</span>
+                    <h3 class="modal-title">{{ getBrandModelText(notebook) }}</h3>
+                  </div>
                 </div>
-                <div>
-                  <span class="modal-category">Notebook</span>
-                  <h3 class="modal-title">{{ getBrandModelText(notebook) }}</h3>
+                <button class="modal-close-btn" aria-label="Fechar" @click="close">
+                  <span class="material-symbols" style="--md-sym-opsz: 20">close</span>
+                </button>
+              </div>
+
+              <div class="modal-body-grid">
+                <div class="info-field">
+                  <span class="field-label">Marca</span>
+                  <span class="field-value">{{ notebook.brand || 'Não informada' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Modelo</span>
+                  <span class="field-value">{{ notebook.model || 'Não informado' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Número de Série (SN)</span>
+                  <span class="field-value monospace">{{ notebook.serialNumber || 'N/A' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Carrinho</span>
+                  <span class="field-value highlight">
+                    <span class="material-symbols" style="--md-sym-opsz: 18">charger</span>
+                    {{ notebook.cart || 'Sem carrinho' }}
+                  </span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Número</span>
+                  <span class="field-value">#{{ notebook.number ?? 'N/A' }}</span>
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Condição</span>
+                  <FilterPill 
+                    :label="notebook.condition ? capitalize(notebook.condition) : 'Não informada'"
+                    :icon="getConditionIcon(notebook.condition)"
+                    :variant="getConditionVariant(notebook.condition)"
+                  />
+                </div>
+
+                <div class="info-field">
+                  <span class="field-label">Status de Manutenção</span>
+                  <FilterPill 
+                    :label="notebook.maintenance ? 'Em Manutenção' : 'Em Uso / Operacional'"
+                    :icon="notebook.maintenance ? 'build' : 'check_circle'"
+                    :variant="notebook.maintenance ? 'red' : 'green'"
+                  />
+                </div>
+
+                <div class="info-field full-width">
+                  <span class="field-label">ID do Documento (Firestore)</span>
+                  <span class="field-value monospace small">{{ notebook.id }}</span>
                 </div>
               </div>
-              <button class="modal-close-btn" aria-label="Fechar" @click="close">
-                <span class="material-symbols" style="--md-sym-opsz: 20">close</span>
-              </button>
-            </div>
 
-            <div class="modal-body-grid">
-              <div class="info-field">
-                <span class="field-label">Marca</span>
-                <span class="field-value">{{ notebook.brand || 'Não informada' }}</span>
+              <div class="modal-actions">
+                <button class="m3-btn m3-btn--tonal m3-btn--has-icon" @click="startEditing">
+                  <span class="material-symbols" style="--md-sym-opsz: 18">edit</span>
+                  <span>Editar Informações</span>
+                </button>
+                <button class="m3-btn m3-btn--filled" @click="close">
+                  Fechar
+                </button>
+              </div>
+            </template>
+
+            <!-- MODO DE EDIÇÃO -->
+            <template v-else>
+              <div class="modal-header">
+                <div class="modal-header-left">
+                  <div class="modal-icon edit-icon">
+                    <span class="material-symbols" style="--md-sym-opsz: 32">edit_note</span>
+                  </div>
+                  <div>
+                    <span class="modal-category">Modo Edição</span>
+                    <h3 class="modal-title">Editar Notebook</h3>
+                  </div>
+                </div>
+                <button class="modal-close-btn" aria-label="Fechar" :disabled="isSaving" @click="cancelEditing">
+                  <span class="material-symbols" style="--md-sym-opsz: 20">close</span>
+                </button>
               </div>
 
-              <div class="info-field">
-                <span class="field-label">Modelo</span>
-                <span class="field-value">{{ notebook.model || 'Não informado' }}</span>
-              </div>
-
-              <div class="info-field">
-                <span class="field-label">Número de Série (SN)</span>
-                <span class="field-value monospace">{{ notebook.serialNumber || 'N/A' }}</span>
-              </div>
-
-              <div class="info-field">
-                <span class="field-label">Carrinho</span>
-                <span class="field-value highlight">
-                  <span class="material-symbols" style="--md-sym-opsz: 18">charger</span>
-                  {{ notebook.cart || 'Sem carrinho' }}
-                </span>
-              </div>
-
-              <div class="info-field">
-                <span class="field-label">Número</span>
-                <span class="field-value">#{{ notebook.number ?? 'N/A' }}</span>
-              </div>
-
-              <div class="info-field">
-                <span class="field-label">Condição</span>
-                <FilterPill 
-                  :label="notebook.condition ? capitalize(notebook.condition) : 'Não informada'"
-                  :icon="getConditionIcon(notebook.condition)"
-                  :variant="getConditionVariant(notebook.condition)"
-                />
-              </div>
-
-              <div class="info-field">
-                <span class="field-label">Status de Manutenção</span>
-                <FilterPill 
-                  :label="notebook.maintenance ? 'Em Manutenção' : 'Em Uso / Operacional'"
-                  :icon="notebook.maintenance ? 'build' : 'check_circle'"
-                  :variant="notebook.maintenance ? 'red' : 'green'"
-                />
-              </div>
-
-              <div class="info-field full-width">
-                <span class="field-label">ID do Documento (Firestore)</span>
-                <span class="field-value monospace small">{{ notebook.id }}</span>
-              </div>
-            </div>
-
-            <div class="modal-actions">
-              <button class="m3-btn m3-btn--tonal" @click="close">
-                Fechar
-              </button>
-            </div>
+              <NotebookEditForm 
+                :notebook="notebook" 
+                :is-saving="isSaving" 
+                :error-message="errorMessage"
+                @save="saveChanges" 
+                @cancel="cancelEditing"
+              />
+            </template>
           </div>
         </div>
       </div>
@@ -152,7 +233,7 @@ const close = () => {
 
 .modal-card {
   width: 100%;
-  max-width: 540px;
+  max-width: 580px;
   max-height: 90vh;
   overflow-y: auto;
   text-align: left;
@@ -185,6 +266,11 @@ const close = () => {
   border-radius: var(--md-sys-shape-medium);
 }
 
+.modal-icon.edit-icon {
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
 .modal-category {
   font: var(--md-sys-typescale-label-medium);
   color: var(--md-sys-color-primary);
@@ -211,7 +297,7 @@ const close = () => {
   transition: background-color 150ms ease;
 }
 
-.modal-close-btn:hover {
+.modal-close-btn:hover:not(:disabled) {
   background-color: var(--md-sys-color-surface-container-high);
 }
 
@@ -262,11 +348,82 @@ const close = () => {
   color: var(--md-sys-color-primary);
 }
 
+/* FORMULÁRIO DE EDIÇÃO */
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font: var(--md-sys-typescale-label-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 600;
+}
+
+.m3-input {
+  height: 42px;
+  padding: 0 12px;
+  border-radius: var(--md-sys-shape-small);
+  border: 1px solid var(--md-sys-color-outline);
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-body-medium);
+  box-sizing: border-box;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.m3-input:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
+}
+
+.m3-input.monospace {
+  font-family: monospace;
+}
+
+.cart-selector-pills,
+.condition-selector-pills,
+.maintenance-selector-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cart-custom-input {
+  margin-top: 4px;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #FFEBEE;
+  color: #C62828;
+  padding: 10px 14px;
+  border-radius: var(--md-sys-shape-small);
+  font: var(--md-sys-typescale-body-small);
+  margin-bottom: 16px;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 12px;
+  padding-top: 16px;
   border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 

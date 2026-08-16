@@ -81,6 +81,7 @@
     <NotebookDetailModal 
       :notebook="selectedNotebook" 
       @close="closeNotebookDetails" 
+      @updated="getAllEquipments"
     />
   </div>
 </template>
