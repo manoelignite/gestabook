@@ -206,6 +206,17 @@ const close = () => {
   animation: modalScaleIn 200ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+/* Regras exclusivas para PWA Desktop (Window Controls Overlay & Standalone) */
+@media (display-mode: window-controls-overlay), (display-mode: standalone) {
+  .modal-overlay {
+    padding-top: calc(env(titlebar-area-height, 48px) + 16px);
+  }
+  
+  .modal-card {
+    max-height: calc(100vh - env(titlebar-area-height, 48px) - 48px);
+  }
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
