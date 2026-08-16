@@ -5,114 +5,26 @@
     <div class="presets-bar">
       <span class="presets-label">Preenchimento Rápido:</span>
       <div class="pills-grid">
-        <FilterPill label="Samsung Chromebook" icon="laptop_mac" @click="applyPreset('Samsung', 'Chromebook')" />
-        <FilterPill label="Positivo Master N8440" icon="laptop_mac" @click="applyPreset('Positivo', 'Master N8440')" />
-        <FilterPill label="ThinkPad L14" icon="laptop_mac" @click="applyPreset('Lenovo', 'ThinkPad L14')" />
-        <FilterPill label="Positivo Master N1110" icon="laptop_mac" @click="applyPreset('Positivo', 'Master N1110')" />
-        <FilterPill label="Positivo Master N1210" icon="laptop_mac" @click="applyPreset('Positivo', 'Master N1210')" />
+        <FilterPill 
+          v-for="preset in MODEL_PRESETS" 
+          :key="preset.label" 
+          :label="preset.label" 
+          icon="laptop_mac" 
+          @click="applyPreset(preset.brand, preset.model)" 
+        />
       </div>
     </div>
 
-    <form @submit.prevent="handleSubmit" class="equipment-form">
-      <div>
-        <label for="notebookBrand">Marca</label>
-        <input 
-          id="notebookBrand" 
-          v-model.trim="notebook.brand" 
-          type="text" 
-          placeholder="Ex: Dell, Lenovo, HP"
-          required
-        >
-      </div>
-
-      <div>
-        <label for="notebookModel">Modelo</label>
-        <input 
-          id="notebookModel" 
-          v-model.trim="notebook.model" 
-          type="text" 
-          placeholder="Ex: Latitude 5430"
-          required
-        >
-      </div>
-
-      <div>
-        <label for="notebookSerialNumber">Número de Série (Serial Number)</label>
-        <input 
-          id="notebookSerialNumber" 
-          v-model.trim="notebook.serialNumber" 
-          type="text" 
-          placeholder="Ex: BR12345XX"
-          required
-        >
-      </div>
-
-      <div class="cart-field-container">
-        <label for="notebookCart">Identificação do Carrinho</label>
-        <div class="cart-pills-grid">
-          <CartPill 
-            v-for="option in cartOptions" 
-            :key="option" 
-            :cart="option"
-            :active="notebook.cart === option" 
-            @click="notebook.cart = option"
-          />
-        </div>
-        <input 
-          id="notebookCart" 
-          v-model.trim="notebook.cart" 
-          type="text" 
-          placeholder="Ou digite a identificação..."
-          required
-        >
-      </div>
-
-      <div>
-        <label for="notebookNumber">Número</label>
-        <input 
-          id="notebookNumber" 
-          v-model.number="notebook.number" 
-          type="number" 
-          min="1"
-          placeholder="Ex: 12"
-          required
-        >
-      </div>
-
-      <div>
-        <label for="notebookCondition">Condição</label>
-        <select 
-          id="notebookCondition" 
-          v-model="notebook.condition" 
-          required
-        >
-          <option value="" disabled>Selecione a condição...</option>
-          <option value="excelente">Excelente</option>
-          <option value="boa">Boa</option>
-          <option value="ruim">Ruim</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="notebookMaintenance">Em Manutenção</label>
-        <select 
-          id="notebookMaintenance" 
-          v-model="notebook.maintenance" 
-          required
-        >
-          <option :value="false">Não</option>
-          <option :value="true">Sim</option>
-        </select>
-      </div>
-
-      <button class="m3-btn m3-btn--filled" type="submit" :disabled="isSubmitting">
-        <span class="material-symbols" style="--md-sym-opsz: 18">save</span>
-        <span>{{ isSubmitting ? 'Cadastrando...' : 'Cadastrar Notebook' }}</span>
-      </button>
-
+    <div class="form-wrapper">
       <p v-if="successMessage" class="feedback-message success">{{ successMessage }}</p>
-      <p v-if="errorMessage" class="feedback-message error">{{ errorMessage }}</p>
-    </form>
+      <NotebookForm 
+        mode="create" 
+        :notebook="notebook" 
+        :is-saving="isSubmitting" 
+        :error-message="errorMessage" 
+        @save="handleSubmit" 
+      />
+    </div>
   </div>
 </template>
 
@@ -121,13 +33,11 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { addDoc, collection } from 'firebase/firestore'
 import { database } from '../../config/firebaseConfig'
-import { DEFAULT_CART_OPTIONS, type Notebook, type NotebookCondition } from '../../types/notebook'
-import { FilterPill, CartPill } from '../../components/pills'
+import { MODEL_PRESETS, type Notebook, type NotebookCondition } from '../../types/notebook'
+import { FilterPill } from '../../components/pills'
+import NotebookForm from '../../components/NotebookForm.vue'
 
 const route = useRoute()
-
-const cartOptions = DEFAULT_CART_OPTIONS
-
 
 const createInitialState = (): Omit<Notebook, 'id'> => ({
   brand: '',
@@ -135,7 +45,7 @@ const createInitialState = (): Omit<Notebook, 'id'> => ({
   serialNumber: '',
   cart: 'Carrinho 1',
   number: 1,
-  condition: '' as NotebookCondition,
+  condition: 'excelente' as NotebookCondition,
   maintenance: false
 })
 
@@ -145,20 +55,24 @@ const successMessage = ref('')
 const errorMessage = ref('')
 
 const applyPreset = (brand: string, model: string) => {
-  notebook.value.brand = brand
-  notebook.value.model = model
+  notebook.value = {
+    ...notebook.value,
+    brand,
+    model
+  }
 }
 
 onMounted(() => {
-  if (route.query.brand) {
-    notebook.value.brand = String(route.query.brand)
-  }
-  if (route.query.model) {
-    notebook.value.model = String(route.query.model)
+  if (route.query.brand || route.query.model) {
+    notebook.value = {
+      ...notebook.value,
+      brand: route.query.brand ? String(route.query.brand) : notebook.value.brand,
+      model: route.query.model ? String(route.query.model) : notebook.value.model
+    }
   }
 })
 
-const handleSubmit = async () => {
+const handleSubmit = async (formData: Omit<Notebook, 'id'>) => {
   isSubmitting.value = true
   successMessage.value = ''
   errorMessage.value = ''
@@ -166,11 +80,11 @@ const handleSubmit = async () => {
   try {
     const payload = {
       type: 'notebook',
-      ...notebook.value
+      ...formData
     }
     await addDoc(collection(database, 'equipments'), payload)
     successMessage.value = 'Notebook cadastrado com sucesso!'
-    resetForm()
+    resetForm(formData)
   } catch (error) {
     console.error('Erro ao cadastrar notebook:', error)
     errorMessage.value = 'Falha ao cadastrar o notebook. Tente novamente.'
@@ -179,18 +93,13 @@ const handleSubmit = async () => {
   }
 }
 
-const resetForm = () => {
-  const currentBrand = notebook.value.brand
-  const currentModel = notebook.value.model
-  const currentCart = notebook.value.cart
-  const currentNumber = notebook.value.number
-
+const resetForm = (lastSaved: Omit<Notebook, 'id'>) => {
   notebook.value = {
     ...createInitialState(),
-    brand: currentBrand || '',
-    model: currentModel || '',
-    cart: currentCart || 'Carrinho 1',
-    number: (currentNumber ?? 0) + 1
+    brand: lastSaved.brand || '',
+    model: lastSaved.model || '',
+    cart: lastSaved.cart || 'Carrinho 1',
+    number: (lastSaved.number ?? 0) + 1
   }
 }
 </script>

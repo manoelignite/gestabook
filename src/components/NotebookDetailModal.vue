@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { doc, updateDoc } from 'firebase/firestore'
 import { database } from '../config/firebaseConfig'
 import { ConditionPill, MaintenancePill } from './pills'
-import NotebookEditForm from './NotebookEditForm.vue'
+import NotebookForm from './NotebookForm.vue'
 import { 
   type Notebook, 
   getBrandModelText as formatBrandModel 
@@ -164,7 +164,8 @@ const close = () => {
                 </button>
               </div>
 
-              <NotebookEditForm 
+              <NotebookForm 
+                mode="edit"
                 :notebook="notebook" 
                 :is-saving="isSaving" 
                 :error-message="errorMessage"
