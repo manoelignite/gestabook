@@ -8,10 +8,6 @@ const router = useRouter()
 <template>
   <nav class="bottom-nav-bar">
     <div class="nav-scroll-container">
-      <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/dashboard')">
-        <span class="material-symbols" style="--md-sym-opsz: 18">dashboard</span>
-        <span>Dashboard</span>
-      </button>
       <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/equipment/list')">
         <span class="material-symbols" style="--md-sym-opsz: 18">devices</span>
         <span>Listar Equipamentos</span>
@@ -19,10 +15,6 @@ const router = useRouter()
       <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/equipment/new')">
         <span class="material-symbols" style="--md-sym-opsz: 18">add_circle</span>
         <span>Cadastrar Equipamento</span>
-      </button>
-      <button class="m3-btn m3-btn--tonal m3-btn--has-icon nav-item-btn" @click="router.push('/reservations/my')">
-        <span class="material-symbols" style="--md-sym-opsz: 18">book_online</span>
-        <span>Minhas Reservas</span>
       </button>
       <AdminNavButtons />
     </div>

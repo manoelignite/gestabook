@@ -44,12 +44,12 @@ router.beforeEach(async (to) => {
 
     const allowedRoles = to.meta.allowedRoles as string[] | undefined;
     if (allowedRoles && !allowedRoles.includes(userRole as string)) {
-      return '/dashboard'
+      return '/equipment/list'
     }
   }
 
   if (to.meta.requiresGuest && isAuthenticated && userRole !== 'denied') {
-    const targetPath = userRole === 'admin' ? '/admin' : '/dashboard';
+    const targetPath = userRole === 'admin' ? '/admin' : '/equipment/list';
 
     if (to.path !== targetPath) {
       return targetPath
