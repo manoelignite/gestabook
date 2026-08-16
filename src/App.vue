@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import Header from './components/Header.vue';
-import Bottombar from './components/Bottombar.vue';
+import BottomNavigationBar from './components/BottomNavigationBar.vue';
 import { useAuthStore } from './stores/auth';
 
 const authStore = useAuthStore();
@@ -13,7 +13,7 @@ const authStore = useAuthStore();
     <main class="app-content">
       <RouterView />
     </main>
-    <Bottombar v-if="authStore.user && authStore.role !== 'denied'" />
+    <BottomNavigationBar v-if="authStore.user && authStore.role !== 'denied'" />
   </div>
 </template>
 
