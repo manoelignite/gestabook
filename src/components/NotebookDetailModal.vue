@@ -4,10 +4,15 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { database } from '../config/firebaseConfig'
 import FilterPill from './FilterPill.vue'
 import NotebookEditForm from './NotebookEditForm.vue'
-import type { NotebookItem } from './NotebookListItem.vue'
+import { 
+  type Notebook, 
+  getBrandModelText as formatBrandModel, 
+  getConditionVariant as formatConditionVariant, 
+  getConditionIcon as formatConditionIcon 
+} from '../types/notebook'
 
 const props = defineProps<{
-  notebook: NotebookItem | null
+  notebook: Notebook | null
 }>()
 
 const emit = defineEmits<{
@@ -34,7 +39,7 @@ const cancelEditing = () => {
   errorMessage.value = null
 }
 
-const saveChanges = async (formData: Omit<NotebookItem, 'id'>) => {
+const saveChanges = async (formData: Omit<Notebook, 'id'>) => {
   if (!props.notebook?.id) return
 
   try {
@@ -56,37 +61,15 @@ const saveChanges = async (formData: Omit<NotebookItem, 'id'>) => {
   }
 }
 
-const getBrandModelText = (item: NotebookItem) => {
-  const brand = item.brand || ''
-  const model = item.model || ''
-  if (brand && model) return `${brand} ${model}`
-  if (brand) return brand
-  if (model) return model
-  return 'Notebook Sem Nome'
-}
-
-const getConditionVariant = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'green'
-    case 'boa': return 'blue'
-    case 'ruim': return 'orange'
-    default: return 'default'
-  }
-}
-
-const getConditionIcon = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'sentiment_very_satisfied'
-    case 'boa': return 'thumb_up'
-    case 'ruim': return 'warning'
-    default: return 'help'
-  }
-}
+const getBrandModelText = (item: Notebook) => formatBrandModel(item)
+const getConditionVariant = (condition?: string) => formatConditionVariant(condition)
+const getConditionIcon = (condition?: string) => formatConditionIcon(condition)
 
 const capitalize = (text?: string) => {
   if (!text) return ''
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
+
 
 const close = () => {
   if (isSaving.value) return

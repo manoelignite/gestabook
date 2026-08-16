@@ -93,38 +93,17 @@ import { database } from '../../config/firebaseConfig';
 import FilterPill from '../../components/FilterPill.vue';
 import NotebookListItem from '../../components/NotebookListItem.vue';
 import NotebookDetailModal from '../../components/NotebookDetailModal.vue';
-
-interface Preset {
-  label: string;
-  brand: string;
-  model: string;
-}
+import { DEFAULT_CART_OPTIONS, MODEL_PRESETS, type NotebookPreset } from '../../types/notebook';
 
 const equipments = ref<any[]>([]);
 const selectedNotebook = ref<any | null>(null);
 
 const selectedCart = ref<string | null>(null);
-const selectedPreset = ref<Preset | null>(null);
+const selectedPreset = ref<NotebookPreset | null>(null);
 
-const cartOptions = [
-  'Carrinho 1',
-  'Carrinho 2',
-  'Carrinho 3',
-  'Carrinho 4',
-  'Carrinho 5',
-  'DS-TA',
-  'DS-TB',
-  'DS-MA',
-  'DS-MB'
-];
+const cartOptions = DEFAULT_CART_OPTIONS;
+const modelPresets = MODEL_PRESETS;
 
-const modelPresets: Preset[] = [
-  { label: 'Samsung Chromebook', brand: 'Samsung', model: 'Chromebook' },
-  { label: 'Positivo Master N8440', brand: 'Positivo', model: 'Master N8440' },
-  { label: 'ThinkPad L14', brand: 'Lenovo', model: 'ThinkPad L14' },
-  { label: 'Positivo Master N1110', brand: 'Positivo', model: 'Master N1110' },
-  { label: 'Positivo Master N1210', brand: 'Positivo', model: 'Master N1210' }
-];
 
 const getAllEquipments = async () => {
   try {
@@ -178,7 +157,7 @@ const toggleCartFilter = (cart: string) => {
   }
 };
 
-const togglePresetFilter = (preset: Preset) => {
+const togglePresetFilter = (preset: NotebookPreset) => {
   if (selectedPreset.value?.label === preset.label) {
     selectedPreset.value = null;
   } else {

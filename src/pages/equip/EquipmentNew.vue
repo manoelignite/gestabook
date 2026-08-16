@@ -42,23 +42,12 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import FilterPill from '../../components/FilterPill.vue'
+import { MODEL_PRESETS } from '../../types/notebook'
 
 const router = useRouter()
 
-interface Preset {
-  label: string
-  brand: string
-  model: string
-  icon?: string
-}
+const notebookPresets = MODEL_PRESETS
 
-const notebookPresets: Preset[] = [
-  { label: 'Samsung Chromebook', brand: 'Samsung', model: 'Chromebook' },
-  { label: 'Positivo Master N8440', brand: 'Positivo', model: 'Master N8440' },
-  { label: 'ThinkPad L14', brand: 'Lenovo', model: 'ThinkPad L14' },
-  { label: 'Positivo Master N1110', brand: 'Positivo', model: 'Master N1110' },
-  { label: 'Positivo Master N1210', brand: 'Positivo', model: 'Master N1210' }
-]
 
 const goToNotebookNew = (brand?: string, model?: string) => {
   if (brand && model) {

@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import FilterPill from './FilterPill.vue'
+import { 
+  type Notebook, 
+  getBrandModelText as formatBrandModel, 
+  getConditionVariant as formatConditionVariant, 
+  getConditionIcon as formatConditionIcon 
+} from '../types/notebook'
 
-export interface NotebookItem {
-  id?: string
-  brand?: string
-  model?: string
-  serialNumber?: string
-  cart?: string
-  number?: number
-  condition?: string
-  maintenance?: boolean
-  type?: string
-}
+export type NotebookItem = Notebook
 
 const props = withDefaults(defineProps<{
-  notebook: NotebookItem
+  notebook: Notebook
   selectedCart?: string | null
   showAllPills?: boolean
 }>(), {
@@ -23,41 +19,19 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  (e: 'click', notebook: NotebookItem): void
+  (e: 'click', notebook: Notebook): void
   (e: 'cart-click', cart: string): void
 }>()
 
-const getBrandModelText = () => {
-  const brand = props.notebook.brand || ''
-  const model = props.notebook.model || ''
-  if (brand && model) return `${brand} ${model}`
-  if (brand) return brand
-  if (model) return model
-  return 'Notebook Sem Nome'
-}
-
-const getConditionVariant = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'green'
-    case 'boa': return 'blue'
-    case 'ruim': return 'orange'
-    default: return 'default'
-  }
-}
-
-const getConditionIcon = (condition?: string) => {
-  switch (condition?.toLowerCase()) {
-    case 'excelente': return 'sentiment_very_satisfied'
-    case 'boa': return 'thumb_up'
-    case 'ruim': return 'warning'
-    default: return 'help'
-  }
-}
+const getBrandModelText = () => formatBrandModel(props.notebook)
+const getConditionVariant = (condition?: string) => formatConditionVariant(condition)
+const getConditionIcon = (condition?: string) => formatConditionIcon(condition)
 
 const capitalize = (text?: string) => {
   if (!text) return ''
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
+
 
 const handleCartClick = (event: MouseEvent) => {
   event.stopPropagation()

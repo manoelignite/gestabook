@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import FilterPill from './FilterPill.vue'
-import type { NotebookItem } from './NotebookListItem.vue'
+import { 
+  DEFAULT_CART_OPTIONS, 
+  CONDITION_OPTIONS, 
+  type Notebook, 
+  type NotebookCondition 
+} from '../types/notebook'
 
 const props = defineProps<{
-  notebook: NotebookItem
+  notebook: Notebook
   isSaving?: boolean
   errorMessage?: string | null
 }>()
 
 const emit = defineEmits<{
-  (e: 'save', formData: Omit<NotebookItem, 'id'>): void
+  (e: 'save', formData: Omit<Notebook, 'id'>): void
   (e: 'cancel'): void
 }>()
 
@@ -20,24 +25,12 @@ const editForm = ref({
   serialNumber: '',
   cart: '',
   number: null as number | null,
-  condition: 'excelente',
+  condition: 'excelente' as NotebookCondition | string,
   maintenance: false
 })
 
-const defaultCartOptions = [
-  'Carrinho 1',
-  'Carrinho 2',
-  'Carrinho 3',
-  'Carrinho 4',
-  'Carrinho 5',
-  'DS-TA',
-  'DS-TB',
-  'DS-MA',
-  'DS-MB'
-]
-
 const availableCartOptions = computed(() => {
-  const options = [...defaultCartOptions]
+  const options = [...DEFAULT_CART_OPTIONS]
   const currentCart = editForm.value.cart?.trim()
   if (currentCart && !options.some(opt => opt.trim().toLowerCase() === currentCart.toLowerCase())) {
     options.push(currentCart)
@@ -50,14 +43,11 @@ const isCartActive = (option: string) => {
   return editForm.value.cart.trim().toLowerCase() === option.trim().toLowerCase()
 }
 
-const conditionOptions = [
-  { label: 'Excelente', value: 'excelente', variant: 'green' as const, icon: 'sentiment_very_satisfied' },
-  { label: 'Boa', value: 'boa', variant: 'blue' as const, icon: 'thumb_up' },
-  { label: 'Ruim', value: 'ruim', variant: 'orange' as const, icon: 'warning' }
-]
+const conditionOptions = CONDITION_OPTIONS
 
 const isConditionActive = (condValue: string) => {
   if (!editForm.value.condition) return false
+
   return editForm.value.condition.trim().toLowerCase() === condValue.trim().toLowerCase()
 }
 

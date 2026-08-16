@@ -122,22 +122,13 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { addDoc, collection } from 'firebase/firestore'
 import { database } from '../../config/firebaseConfig'
-import type { Notebook, NotebookCondition } from '../../types/notebook'
+import { DEFAULT_CART_OPTIONS, type Notebook, type NotebookCondition } from '../../types/notebook'
 import FilterPill from '../../components/FilterPill.vue'
 
 const route = useRoute()
 
-const cartOptions = [
-  'Carrinho 1',
-  'Carrinho 2',
-  'Carrinho 3',
-  'Carrinho 4',
-  'Carrinho 5',
-  'DS-TA',
-  'DS-TB',
-  'DS-MA',
-  'DS-MB'
-]
+const cartOptions = DEFAULT_CART_OPTIONS
+
 
 const createInitialState = (): Omit<Notebook, 'id'> => ({
   brand: '',
@@ -197,10 +188,10 @@ const resetForm = () => {
 
   notebook.value = {
     ...createInitialState(),
-    brand: currentBrand,
-    model: currentModel,
-    cart: currentCart,
-    number: currentNumber + 1
+    brand: currentBrand || '',
+    model: currentModel || '',
+    cart: currentCart || 'Carrinho 1',
+    number: (currentNumber ?? 0) + 1
   }
 }
 </script>
